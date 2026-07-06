@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KangSensus Assistant - Pastel Edition</title>
+    <!-- Menggunakan Tailwind CSS untuk styling cepat -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk font kartun yang lucu -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #F7F9FA; /* Abu-abu putih susu */
+        }
+        .font-cartoon {
+            font-family: 'Fredoka One', cursive;
+        }
+        /* Style ala Komik/Neo-Brutalism versi Lembut */
+        .comic-border {
+            border: 3px solid #4A4A4A;
+            box-shadow: 4px 4px 0px #4A4A4A;
+        }
+        .comic-button {
+            border: 3px solid #4A4A4A;
+            box-shadow: 3px 3px 0px #4A4A4A;
+            transition: all 0.1s ease;
+        }
+        .comic-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #4A4A4A;
+        }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER & MASKOT -->
+    <header class="bg-[#A8E6CF] comic-border rounded-2xl p-4 mb-6 flex items-center gap-3 relative mt-4">
+        <!-- Maskot Kang Sensus Mini -->
+        <div class="bg-[#FFAAA5] w-14 h-14 rounded-full comic-border flex items-center justify-center text-2xl shrink-0">
+            👦🏻
+        </div>
+        <div>
+            <h1 class="font-cartoon text-xl text-[#4A4A4A] tracking-wide">KangSensus</h1>
+            <p id="bubble-speech" class="text-xs text-[#5A5A5A] font-bold">Yuk semangat, satu bangunan lagi demi data Indonesia! 🎯</p>
+        </div>
+    </header>
+
+    <!-- PROGRESS BAR IMUT -->
+    <div class="w-full bg-white comic-border rounded-full h-6 mb-6 overflow-hidden p-0.5">
+        <div id="progress-bar" class="bg-[#AED6F1] h-full rounded-full transition-all duration-300" style="width: 33.3%"></div>
+    </div>
+
+    <!-- UTAMA: FORM MULTI-STEP -->
+    <main class="flex-grow">
+        <form id="sensusForm" onsubmit="event.preventDefault();">
+            
+            <!-- STEP 1: IDENTITAS -->
+            <div id="step-1" class="bg-white comic-border rounded-2xl p-5 space-y-4">
+                <span class="bg-[#FFAAA5] text-sm font-bold text-[#4A4A4A] px-3 py-1 rounded-full comic-border inline-block">
+                    Bagian 1 dari 3
+                </span>
+                <h2 class="font-cartoon text-lg text-[#4A4A4A]">Identitas Bangunan & Keluarga</h2>
+                
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Nomor Urut Bangunan</label>
+                    <input type="text" id="no_bangunan" required placeholder="Contoh: 024B" 
+                           class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none focus:bg-white text-sm font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Nama Kepala Keluarga</label>
+                    <input type="text" id="nama_kk" required placeholder="Nama lengkap sesuai KTP" 
+                           class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none focus:bg-white text-sm font-bold">
+                </div>
+            </div>
+
+            <!-- STEP 2: KONDISI SOSIAL EKONOMI -->
+            <div id="step-2" class="bg-white comic-border rounded-2xl p-5 space-y-4 hidden">
+                <span class="bg-[#D1F2E5] text-sm font-bold text-[#4A4A4A] px-3 py-1 rounded-full comic-border inline-block">
+                    Bagian 2 dari 3
+                </span>
+                <h2 class="font-cartoon text-lg text-[#4A4A4A]">Kondisi Sosial Ekonomi</h2>
+                
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Pengeluaran Pangan Sebulan (Rp)</label>
+                    <input type="number" id="pengeluaran_pangan" required placeholder="0" oninput="cekValidasiAnomali()"
+                           class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none focus:bg-white text-sm font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Pengeluaran Non-Pangan Sebulan (Rp)</label>
+                    <input type="number" id="pengeluaran_nonpangan" required placeholder="0" oninput="cekValidasiAnomali()"
+                           class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none focus:bg-white text-sm font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Daya Listrik Rumah (Watt)</label>
+                    <select id="daya_listrik" onchange="cekValidasiAnomali()"
+                            class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none text-sm font-bold">
+                        <option value="450">450 Watt</option>
+                        <option value="900">900 Watt</option>
+                        <option value="1300">1300 Watt</option>
+                        <option value="0">0 Watt (Tidak Pasang Listrik)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-[#4A4A4A] mb-1">Biaya Kuota Internet/Wifi Sebulan (Rp)</label>
+                    <input type="number" id="biaya_internet" required placeholder="0" oninput="cekValidasiAnomali()"
+                           class="w-full p-3 bg-[#F7F9FA] comic-border rounded-xl focus:outline-none focus:bg-white text-sm font-bold">
+                </div>
+            </div>
+
+            <!-- STEP 3: LOGIKA VALIDASI OTOMATIS (ANOMALI) -->
+            <div id="step-3" class="bg-white comic-border rounded-2xl p-5 space-y-4 hidden">
+                <span class="bg-[#FDEBD0] text-sm font-bold text-[#4A4A4A] px-3 py-1 rounded-full comic-border inline-block">
+                    Bagian 3 dari 3
+                </span>
+                <h2 class="font-cartoon text-lg text-[#4A4A4A]">Konfirmasi & Catatan Lapangan</h2>
+                
+                <!-- Pesan jika data normal -->
+                <div id="status-normal" class="bg-[#D1F2E5] p-3 rounded-xl border-2 border-dashed border-green-500 text-center text-sm font-bold text-green-700">
+                    ✨ Semua data tampaknya wajar dan konsisten!
+                </div>
+
+                <!-- Kolom Alasan Tambahan jika terdeteksi Anomali -->
+                <div id="box-anomali" class="space-y-3 hidden">
+                    <div class="bg-[#FADBD8] p-3 rounded-xl border-2 border-dashed border-red-400 text-sm font-bold text-red-700">
+                        ⚠️ KangSensus mendeteksi adanya keunikan data. Tolong isi konfirmasi di bawah ya!
+                    </div>
+                    
+                    <div id="alasan-listrik-box" class="hidden">
+                        <label class="block text-xs font-bold text-red-700 mb-1">Alasan Pengeluaran > Listrik/Internet Rendah:</label>
+                        <textarea id="alasan_anomali" placeholder="Misal: Listrik menumpang di rumah orang tua sebelah..." 
+                                  class="w-full p-3 bg-[#FFF5F5] comic-border rounded-xl text-xs font-bold focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-[#EAECEE] rounded-xl text-center text-xs font-bold text-gray-600">
+                    Dengan menekan Simpan, data akan tersimpan di sistem lokal.
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- TOMBOL NAVIGASI -->
+    <footer class="mt-6 flex justify-between gap-4">
+        <button id="btn-prev" onclick="pindahStep(-1)" disabled
+                class="comic-button bg-gray-300 text-gray-600 font-cartoon py-3 px-6 rounded-xl text-sm w-1/2 opacity-50 cursor-not-allowed">
+            ⬅️ Kembali
+        </button>
+        <button id="btn-next" onclick="pindahStep(1)"
+                class="comic-button bg-[#AED6F1] text-[#4A4A4A] font-cartoon py-3 px-6 rounded-xl text-sm w-1/2">
+            Lanjut ➡️
+        </button>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIKA -->
+    <script>
+        let currentStep = 1;
+
+        function pindahStep(arah) {
+            // Validasi input sebelum lanjut
+            if (arah === 1) {
+                const inputsSaatIni = document.querySelectorAll(`#step-${currentStep} input, #step-${currentStep} select`);
+                for (let input of inputsSaatIni) {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        return;
+                    }
+                }
+            }
+
+            // Sembunyikan step saat ini
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            
+            // Ubah step
+            currentStep += arah;
+            
+            // Tampilkan step baru
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            // Update UI Progress & Tombol
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update Progress Bar
+            const progress = (currentStep / 3) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Atur Tombol Kembali
+            const btnPrev = document.getElementById('btn-prev');
+            if (currentStep === 1) {
+                btnPrev.disabled = true;
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-300');
+                btnPrev.classList.remove('bg-white');
+            } else {
+                btnPrev.disabled = false;
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-300');
+                btnPrev.classList.add('bg-white');
+            }
+
+            // Atur Tombol Lanjut / Simpan
+            const btnNext = document.getElementById('btn-next');
+            const speech = document.getElementById('bubble-speech');
+
+            if (currentStep === 3) {
+                btnNext.innerHTML = "💾 Simpan Data";
+                btnNext.classList.remove('bg-[#AED6F1]');
+                btnNext.classList.add('bg-[#A8E6CF]'); // Berubah jadi hijau mint saat siap simpan
+                speech.innerText = "Periksa kembali konfirmasinya ya sebelum disimpan!";
+                cekValidasiAnomali();
+            } else {
+                btnNext.innerHTML = "Lanjut ➡️";
+                btnNext.classList.remove('bg-[#A8E6CF]');
+                btnNext.classList.add('bg-[#AED6F1]');
+                
+                if(currentStep === 1) speech.innerText = "Yuk semangat, satu bangunan lagi demi data Indonesia! 🎯";
+                if(currentStep === 2) speech.innerText = "Hati-hati saat menginput nominal angka pengeluarannya ya!";
+            }
+
+            // Aksi saat klik tombol Simpan di akhir halaman
+            btnNext.onclick = function() {
+                if (currentStep === 3) {
+                    alert("🎉 Hore! Data keluarga " + document.getElementById('nama_kk').value + " berhasil disimpan dengan aman!");
+                    // Reset Form kembali ke awal
+                    document.getElementById('sensusForm').reset();
+                    document.getElementById(`step-3`).classList.add('hidden');
+                    currentStep = 1;
+                    document.getElementById(`step-1`).classList.remove('hidden');
+                    updateUI();
+                } else {
+                    pindahStep(1);
+                }
+            }
+        }
+
+        // LOGIKA DETEKSI ANOMALI (ANTI-EROR)
+        function cekValidasiAnomali() {
+            const pangan = parseFloat(document.getElementById('pengeluaran_pangan').value) || 0;
+            const nonPangan = parseFloat(document.getElementById('pengeluaran_nonpangan').value) || 0;
+            const totalPengeluaran = pangan + nonPangan;
+            
+            const dayaListrik = parseInt(document.getElementById('daya_listrik').value);
+            const biayaInternet = parseFloat(document.getElementById('biaya_internet').value) || 0;
+
+            const boxAnomali = document.getElementById('box-anomali');
+            const statusNormal = document.getElementById('status-normal');
+            const alasanBox = document.getElementById('alasan-listrik-box');
+            const inputAlasan = document.getElementById('alasan_anomali');
+
+            // Aturan anomali:
+            // 1. Total pengeluaran lumayan besar (> 1.5 Juta) tapi listriknya 0 Watt atau internetnya 0 Rupiah.
+            let adaAnomali = false;
+
+            if (totalPengeluaran > 1500000 && (dayaListrik === 0 || biayaInternet === 0)) {
+                adaAnomali = true;
+            }
+
+            // Tampilkan atau sembunyikan kolom alasan berdasarkan hasil analisis
+            if (adaAnomali) {
+                boxAnomali.classList.remove('hidden');
+                statusNormal.classList.add('hidden');
+                alasanBox.classList.remove('hidden');
+                inputAlasan.required = true;
+            } else {
+                boxAnomali.classList.add('hidden');
+                statusNormal.classList.remove('hidden');
+                alasanBox.classList.add('hidden');
+                inputAlasan.required = false;
+            }
+        }
+    </script>
+</body>
+</html>
