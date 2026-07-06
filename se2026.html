@@ -1166,7 +1166,7 @@
             if(nonFood.length > 0) {
                 nonFood.forEach(nf => {
                     if(nf.nominal > 0) {
-                        text += `biaya: ${nf.nama || 'kebutuhan rutin'} sebesar ${formatRupiah(nf.nominal)} per ${nf.periode.toLowerCase()}, `;
+                        text += `biaya ${nf.nama || 'kebutuhan rutin'} sebesar ${formatRupiah(nf.nominal)} per ${nf.periode.toLowerCase()}, `;
                     }
                 });
             }
