@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KangSensus Assistant - Pop Comic SE2026</title>
+    <!-- Mengimpor Font Bulat Bergaya Kartun -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Mengunci halaman dari awal agar tidak bisa diintip sebelum password benar
+        document.documentElement.style.display = 'none';
+
+        function mintaPassword() {
+            let inputUser = prompt("Perasaan anda jadi kang sensus?");
+            if (inputUser === "mumet") {
+                document.documentElement.style.display = 'block';
+            } else {
+                alert("Hayolo! Akses Ditolak.");
+                mintaPassword();
+            }
+        }
+        window.addEventListener('DOMContentLoaded', () => { 
+            mintaPassword(); 
+            initDefaultSetup(); 
+        });
+    </script>
+
+    <style>
+        :root {
+            --bg-comic: #fef9e7;
+            --border-thick: 3px solid #000000;
+            --shadow-flat: 5px 5px 0px #000000;
+            --shadow-flat-sm: 3px 3px 0px #000000;
+            --pop-yellow: #fede00;
+            --pop-green: #2ecc71;
+            --pop-orange: #ff7e00;
+            --pop-blue: #3498db;
+            --pop-pink: #ff6b81;
+            --pop-dark: #1e272e;
+            --text-main: #000000;
+        }
+
+        /* Mode Gelap Kartun */
+        body.dark-comic {
+            --bg-comic: #2c3e50;
+            --pop-yellow: #f1c40f;
+            --pop-green: #27ae60;
+            --pop-orange: #d35400;
+            --pop-blue: #2980b9;
+            --pop-pink: #e84393;
+            --text-main: #ffffff;
+        }
+
+        body.dark-comic .card, 
+        body.dark-comic .master-nav, 
+        body.dark-comic .dynamic-row, 
+        body.dark-comic input, 
+        body.dark-comic select, 
+        body.dark-comic textarea,
+        body.dark-comic th,
+        body.dark-comic td {
+            background-color: #34495e !important;
+            color: #ffffff !important;
+        }
+        body.dark-comic .narrative-box {
+            background-color: #1e272e !important;
+            color: #2ecc71 !important;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-comic);
+            color: var(--text-main);
+            padding-bottom: 50px;
+            transition: background-color 0.3s;
+        }
+
+        header {
+            background: var(--pop-yellow);
+            color: #000;
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: var(--border-thick);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            text-shadow: 2px 2px 0px #fff;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        header p {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        /* Saklar Mode Malam Kartun */
+        .theme-toggle-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fff;
+            border: var(--border-thick);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: var(--shadow-flat-sm);
+            font-size: 14px;
+        }
+        .theme-toggle-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        /* Progress Bar Kartun */
+        .progress-container {
+            max-width: 600px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+        .progress-bar-bg {
+            background: #fff;
+            border: var(--border-thick);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .progress-bar-fill {
+            background: var(--pop-green);
+            height: 100%;
+            width: 16.6%;
+            transition: width 0.4s ease-out;
+            border-right: var(--border-thick);
+        }
+
+        .master-nav {
+            display: flex;
+            background: #ffffff;
+            border-bottom: var(--border-thick);
+            max-width: 600px;
+            margin: 0 auto;
+            border-left: var(--border-thick);
+            border-right: var(--border-thick);
+        }
+
+        .master-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 5px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #000;
+        }
+
+        .master-tab.active {
+            background-color: var(--pop-orange);
+            color: white;
+        }
+
+        /* Navigasi Tombol Atas Ringkas (Tanpa Kata Modul) */
+        .sticky-modul-menu {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: var(--bg-comic);
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+            gap: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .sticky-modul-menu::-webkit-scrollbar { display: none; }
+
+        .modul-btn {
+            padding: 8px 15px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            background: #fff;
+            color: #000;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-flat-sm);
+            pointer-events: none;
+        }
+        .modul-btn.active {
+            background: var(--pop-blue);
+            color: white;
+        }
+        .modul-btn.btn-all {
+            background: var(--pop-pink);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        .modul-btn.btn-all.active {
+            background: var(--pop-dark);
+            color: #fff;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .app-panel { display: none; }
+        .app-panel.active { display: block; }
+        .modul-section { display: none; }
+        .modul-section.show-tab { display: block; }
+
+        .card {
+            background: #ffffff;
+            border: var(--border-thick);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-flat);
+            color: #000;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 15px;
+            background: var(--pop-yellow);
+            padding: 8px;
+            border: var(--border-thick);
+            border-radius: 6px;
+            display: inline-block;
+            box-shadow: var(--shadow-flat-sm);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: var(--border-thick);
+            border-radius: 8px;
+            background-color: #fff;
+            color: #000;
+            outline: none;
+        }
+
+        /* Switch Punya Usaha */
+        .switch-container {
+            background: var(--pop-pink);
+            padding: 12px;
+            border: var(--border-thick);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .switch-box {
+            font-weight: 700;
+            display: flex;
+            gap: 10px;
+        }
+
+        .dynamic-row {
+            background: #fffdf3;
+            border: var(--border-thick);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: var(--shadow-flat-sm);
+        }
+
+        .btn-remove {
+            background: var(--pop-pink);
+            color: white;
+            border: var(--border-thick);
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .btn-add, .btn-comic-primary {
+            background: var(--pop-yellow);
+            color: #000;
+            border: var(--border-thick);
+            padding: 10px;
+            width: 100%;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .btn-add:active, .btn-comic-primary:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        /* Tabel List Pengeluaran Modul 4 */
+        .comic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-flat-sm);
+            background: white;
+        }
+        .comic-table th, .comic-table td {
+            border: var(--border-thick);
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+        }
+        .comic-table th {
+            background: var(--pop-blue);
+            color: white;
+        }
+
+        /* Maskot Berdialog */
+        .maskot-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            border: var(--border-thick);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .maskot-avatar {
+            font-size: 45px;
+            animation: bounce 0.5s infinite alternate;
+        }
+        .maskot-bubble {
+            background: var(--pop-yellow);
+            border: var(--border-thick);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            position: relative;
+            flex: 1;
+        }
+        .maskot-bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent var(--pop-yellow) transparent transparent;
+            display: block;
+            width: 0;
+        }
+
+        .wizard-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn-wizard-back {
+            flex: 1;
+            background: #e2e8f0;
+            border: var(--border-thick);
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .btn-wizard-next {
+            flex: 2;
+            background: var(--pop-green);
+            color: white;
+            border: var(--border-thick);
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .btn-wizard-save {
+            flex: 2;
+            background: var(--pop-orange);
+            color: white;
+            border: var(--border-thick);
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .btn-wizard-back:active, .btn-wizard-next:active, .btn-wizard-save:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .alert-box-comic {
+            background-color: var(--pop-pink);
+            color: white;
+            border: var(--border-thick);
+            padding: 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            box-shadow: var(--shadow-flat-sm);
+        }
+
+        .metric-group {
+            background: #fff;
+            border: var(--border-thick);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-flat-sm);
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 0;
+            border-bottom: 1px dashed #000;
+        }
+
+        .narrative-box {
+            background: #1e272e;
+            border: var(--border-thick);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2ecc71;
+            min-height: 80px;
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+            font-family: monospace;
+            box-shadow: var(--shadow-flat-sm);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--pop-dark);
+            color: white;
+            padding: 10px 20px;
+            border: var(--border-thick);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 99999;
+            display: none;
+            box-shadow: var(--shadow-flat-sm);
+        }
+
+        /* Efek Hujan Kertas Meriah (Confetti) */
+        .confetti {
+            position: fixed; width: 10px; height: 10px; z-index: 9999;
+            animation: fall 2.5s linear infinite;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); top: 0; }
+            100% { transform: translateY(100vh) rotate(360deg); top: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Efek Suara Audio Kartun Beep Murni Sintetis JS -->
+    <script>
+        function playSfx(type) {
+            try {
+                let ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = ctx.createOscillator();
+                let gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                if (type === 'clink') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start(); osc.stop(ctx.currentTime + 0.15);
+                } else if (type === 'boing') {
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(200, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                    osc.start(); osc.stop(ctx.currentTime + 0.2);
+                } else if (type === 'tada') {
+                    osc.type = 'square'; osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start(); osc.stop(ctx.currentTime + 0.4);
+                }
+            } catch (e) { console.log("Audio API error / blocked browser"); }
+        }
+
+        function triggerConfettiAnimation() {
+            const colors = ['#fede00', '#2ecc71', '#ff7e00', '#3498db', '#ff6b81'];
+            for (let i = 0; i < 40; i++) {
+                let div = document.createElement('div');
+                div.className = 'confetti';
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                div.style.transform = `scale(${Math.random() * 1.2 + 0.5})`;
+                div.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 2500);
+            }
+        }
+
+        function toggleThemeMode() {
+            document.body.classList.toggle('dark-comic');
+            playSfx('clink');
+        }
+    </script>
+
+    <header>
+        <h1>KangSensus Assistant</h1>
+        <p>Personal Toolkit Enumerator Sensus Ekonomi 2026 (SE2026)</p>
+        <button class="theme-toggle-btn" onclick="toggleThemeMode()">🌙 Mode</button>
+    </header>
+
+    <!-- Progress Bar Atas -->
+    <div class="progress-container">
+        <div class="progress-bar-bg">
+            <div id="comp_progress_bar" class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <div class="master-nav">
+        <div id="m_tab_form" class="master-tab active" onclick="switchMasterTab('form-panel')">📝 Input Form</div>
+        <div id="m_tab_dash" class="master-tab" onclick="switchMasterTab('dash-panel')">🗂️ Data Terdata</div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="panel_form_container" class="app-panel active">
+        
+        <!-- Navigasi Ringkas Sesuai Request (Murni Hilang Kata Modul) -->
+        <div class="sticky-modul-menu">
+            <div id="nav_btn_m1" class="modul-btn active">1: Identitas Keluarga & Bangunan</div>
+            <div id="nav_btn_m2" class="modul-btn">2: Pendapatan Lainnya (Sekunder Keluarga)</div>
+            <div id="nav_btn_m3" class="modul-btn">3: Sektor Multi Usaha Keluarga (Blok IV & V)</div>
+            <div id="nav_btn_m4" class="modul-btn">4: Komponen Pengeluaran Keluarga</div>
+            <div id="nav_btn_m5" class="modul-btn">5: Sistem Analisis Validasi Finansial</div>
+            <div id="nav_btn_m6" class="modul-btn">6: Narasi Teks Catatan Lapangan Otomatis</div>
+            <div id="nav_btn_all" class="modul-btn btn-all" onclick="toggleViewAllMode()">👀 Semua Bagian</div>
+        </div>
+
+        <div class="container">
+            <div style="margin-bottom: 15px; overflow: hidden;">
+                <button type="button" class="btn-remove" style="float:none;" onclick="triggerManualResetForm()">🧹 Bersihkan Semua Form</button>
+            </div>
+
+            <!-- Bagian 1 -->
+            <div id="sec_modul_m1" class="modul-section show-tab">
+                <div class="card">
+                    <div class="card-title">1: Identitas Keluarga & Bangunan</div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nomor Bangunan *</label>
+                            <input type="text" id="m1_no_rumah" placeholder="Contoh: 024B" oninput="calculateAll()">
+                        </div>
+                        <div class="form-group">
+                            <label>No HP (Opsional)</label>
+                            <input type="text" id="m1_no_hp" placeholder="08xxxxxxxxxx">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; margin-bottom: 10px; font-weight: bold;">Daftar Anggota Keluarga</div>
+                    <div id="m1_art_container"></div>
+                    <button type="button" class="btn-add" onclick="addARTRow(); playSfx('clink');">➕ Tambah Anggota Keluarga</button>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m1">
+                    <button type="button" class="btn-wizard-next" onclick="navigateWizard(2)">Selanjutnya ke Bagian 2 ➡️</button>
+                </div>
+            </div>
+
+            <!-- Bagian 2 -->
+            <div id="sec_modul_m2" class="modul-section">
+                <div class="card">
+                    <div class="card-title">2: Pendapatan Lainnya (Sekunder Keluarga)</div>
+                    <div id="m2_pendapatan_container"></div>
+                    <button type="button" class="btn-add" onclick="addPendapatanRow(); playSfx('clink');">➕ Tambah Pendapatan Sekunder</button>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m2">
+                    <button type="button" class="btn-wizard-back" onclick="navigateWizard(1)">⬅️ Kembali</button>
+                    <button type="button" class="btn-wizard-next" onclick="navigateWizard(3)">Selanjutnya ke Bagian 3 ➡️</button>
+                </div>
+            </div>
+
+            <!-- Bagian 3 -->
+            <div id="sec_modul_m3" class="modul-section">
+                <!-- Fitur Switch Sembunyikan Usaha Sesuai Request -->
+                <div class="switch-container">
+                    <span style="font-weight:700; font-size:14px;">Apakah keluarga memiliki Unit Usaha?</span>
+                    <div class="switch-box">
+                        <select id="switch_punya_usaha" style="width:90px; padding:5px;" onchange="togglePunyaUsahaLogic(); calculateAll();">
+                            <option value="YA">Ya (Ada)</option>
+                            <option value="TIDAK" selected>Tidak</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="wrapper_blok_usaha" style="display:none;">
+                    <div class="card">
+                        <div class="card-title">3: Sektor Multi Usaha Keluarga (Blok IV & V)</div>
+                        <div id="m3_usaha_container"></div>
+                        <button type="button" class="btn-add" onclick="addUsahaRow(); playSfx('clink');">➕ Tambah Unit Usaha Baru</button>
+                    </div>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m3">
+                    <button type="button" class="btn-wizard-back" onclick="navigateWizard(2)">⬅️ Kembali</button>
+                    <button type="button" class="btn-wizard-next" onclick="navigateWizard(4)">Selanjutnya ke Bagian 4 ➡️</button>
+                </div>
+            </div>
+
+            <!-- Bagian 4 -->
+            <div id="sec_modul_m4" class="modul-section">
+                <div class="card">
+                    <div class="card-title">4: Komponen Pengeluaran Keluarga</div>
+                    
+                    <div style="font-weight: 700; margin-bottom: 8px;">A. Pengeluaran Konsumsi Makanan</div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Skala Pilihan Input *</label>
+                            <select id="m4_makan_skala" onchange="handleMakanSkalaChange(); calculateAll();">
+                                <option value="Harian">Harian</option>
+                                <option value="Mingguan">Mingguan</option>
+                                <option value="Bulanan" selected>Bulanan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label id="m4_makan_input_label">Nilai Rupiah Makan *</label>
+                            <input type="number" id="m4_makan_nilai" placeholder="Nominal" oninput="calculateMakanProjections(); calculateAll();">
+                        </div>
+                    </div>
+
+                    <div style="font-weight: 700; margin-top: 15px; margin-bottom: 8px;">B. Pengeluaran Non-Makanan Rutin Utama</div>
+                    <div class="form-group">
+                        <label>Biaya Listrik Bulanan (Rp) *</label>
+                        <input type="number" id="m5_listrik_bulanan" placeholder="Contoh: 150000" oninput="calculateAll()">
+                    </div>
+                    <div id="m5_listrik_warning_area" style="display:none;" class="alert-box_comic">
+                        <label>Alasan biaya listrik rendah/0/kosong *</label>
+                        <input type="text" id="m5_listrik_alasan" placeholder="Misal: Subsidi gabung mertua" oninput="calculateAll()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Biaya Internet Bulanan (Pulsa/Wifi) (Rp) *</label>
+                        <input type="number" id="m5_internet_bulanan" placeholder="Masukkan 0 jika tidak ada" oninput="calculateAll()">
+                    </div>
+                    <div id="m5_internet_warning_area" style="display:none;" class="alert-box_comic">
+                        <label>Alasan biaya internet nihil *</label>
+                        <input type="text" id="m5_internet_alasan" placeholder="Misal: HP Jadul tanpa kuota" oninput="calculateAll()">
+                    </div>
+
+                    <div style="font-weight: 700; margin-top: 20px; margin-bottom: 5px;">C. Komponen Tambahan (Tabel List Ringkas)</div>
+                    
+                    <!-- Form Input Mini Sebelum Masuk Tabel List Sesuai Request -->
+                    <div style="background:#f9f9f9; border:2px solid #000; padding:10px; border-radius:8px; margin-bottom:10px;">
+                        <div class="grid-2">
+                            <input type="text" id="add_nm_nama" placeholder="Nama Pengeluaran (Pakaian, Pajak dll)">
+                            <select id="add_nm_periode">
+                                <option value="Bulanan">Bulanan</option>
+                                <option value="Tahunan">Tahunan</option>
+                            </select>
+                        </div>
+                        <input type="number" id="add_nm_nominal" placeholder="Nominal Rupiah Asli" style="margin-top:5px; margin-bottom:5px;">
+                        <button type="button" class="btn-comic-primary" style="background:var(--pop-blue); color:white;" onclick="pushNonMakanToTableList()">➕ Masukkan ke Tabel Daftar</button>
+                    </div>
+
+                    <!-- Output Tabel Daftar Ringkas Sesuai Request -->
+                    <table class="comic-table" id="table_nonmakan_list">
+                        <thead>
+                            <tr>
+                                <th>Jenis Pengeluaran</th>
+                                <th>Periode</th>
+                                <th>Nominal</th>
+                                <th style="width:60px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_nonmakan">
+                            <!-- Diisi Otomatis Lewat JS Array -->
+                        </tbody>
+                    </table>
+
+                    <div class="metric-group" style="margin-top:20px; background:#fffdf0;">
+                        <div class="metric-row"><span>Total Skala Bulanan:</span><span id="mod4_total_bulanan_screen" style="font-weight:bold;">Rp 0</span></div>
+                        <div class="metric-row"><span>Total Murni Tahunan:</span><span id="mod4_total_tahunan_screen" style="font-weight:bold; color:var(--pop-orange);">Rp 0</span></div>
+                    </div>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m4">
+                    <button type="button" class="btn-wizard-back" onclick="navigateWizard(3)">⬅️ Kembali</button>
+                    <button type="button" class="btn-wizard-next" onclick="navigateWizard(5)">Selanjutnya ke Bagian 5 ➡️</button>
+                </div>
+            </div>
+
+            <!-- Bagian 5 -->
+            <div id="sec_modul_m5" class="modul-section">
+                <div class="card">
+                    <div class="card-title">5: Sistem Analisis Validasi Finansial</div>
+                    
+                    <!-- Maskot Si Kang Sensus Dengan Dialog Lucu Kasual Lapangan -->
+                    <div class="maskot-container">
+                        <div id="maskot_face" class="maskot-avatar">👍</div>
+                        <div class="maskot-bubble" id="maskot_dialog_text">Mantap bosku! Itungannya pas. Lanjut bungkus!</div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-row"><span>Gaji & Pendapatan Sekunder:</span><span id="v_tot_pendapatan">Rp 0</span></div>
+                        <div class="metric-row"><span>Laba Bersih Usaha:</span><span id="v_tot_laba_usaha">Rp 0</span></div>
+                        <div class="metric-row"><span>Total Pengeluaran Rumah Tangga:</span><span id="v_tot_pengeluaran">Rp 0</span></div>
+                        <div class="metric-row" style="border-top:2px solid #000; padding-top:6px;"><span>Selisih Neraca:</span><span id="v_selisih" style="font-weight:bold;">Rp 0</span></div>
+                    </div>
+
+                    <div class="form-group" id="sumber_penutup_group" style="display: none;">
+                        <label style="color: var(--pop-pink);">⚠️ Sumber Penutup Defisit Finansial Lapangan *</label>
+                        <select id="v_sumber_defisit" onchange="calculateAll()">
+                            <option value="">-- Pilih Sumber Penutup --</option>
+                            <option value="Hutang / Pinjaman dari Kerabat atau Bank">Hutang / Pinjaman dari Kerabat atau Bank</option>
+                            <option value="Menggunakan Tabungan Sebelumnya">Menggunakan Tabungan Sebelumnya</option>
+                            <option value="Bantuan Sosial Terstruktur (Bansos / PKH)">Bantuan Sosial Terstruktur (Bansos / PKH)</option>
+                            <option value="Kiriman Regular Anak / Sanak Saudara diluar Keluarga">Kiriman Regular Anak / Sanak Saudara diluar Keluarga</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catatan Tambahan Lapangan (Opsional)</label>
+                        <textarea id="v_catatan_tambahan" rows="2" placeholder="Keterangan anomali..." oninput="calculateAll()"></textarea>
+                    </div>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m5">
+                    <button type="button" class="btn-wizard-back" onclick="navigateWizard(4)">⬅️ Kembali</button>
+                    <button type="button" class="btn-wizard-next" onclick="navigateWizard(6)">Selanjutnya ke Bagian 6 ➡️</button>
+                </div>
+            </div>
+
+            <!-- Bagian 6 -->
+            <div id="sec_modul_m6" class="modul-section">
+                <div class="card">
+                    <div class="card-title">6: Narasi Teks Catatan Lapangan Otomatis</div>
+                    <div id="narrative_output" class="narrative-box">Menunggu pengisian nomor bangunan di Bagian 1...</div>
+                    <button type="button" class="btn-comic-primary" onclick="copyNarrative()">📋 Salin Teks Narasi</button>
+                </div>
+                <div class="wizard-actions" id="wiz_act_m6">
+                    <button type="button" class="btn-wizard-back" onclick="navigateWizard(5)">⬅️ Kembali</button>
+                    <button type="button" class="btn-wizard-save" onclick="saveDataToStorage()">💾 Simpan Responden 🎉</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="panel_dash_container" class="app-panel">
+        <div class="container">
+            <div class="card">
+                <div class="card-title">Daftar Keluarga Berhasil Terdata</div>
+                <button class="btn-comic-primary" style="background:var(--pop-green); color:white; margin-bottom:15px;" onclick="exportToCSV()">📊 Ekspor Data CSV Excel</button>
+                <div id="records_list_container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let artCount = 0, pendapatanCount = 0, usahaCount = 0, currentEditingId = null;
+        let globalMakanBulanan = 0, isViewAllModeActive = false;
+        let nonMakanDataArray = []; // Wadah Tabel List Modul 4
+
+        const kbliOptions = [
+            "Pertanian, Kehutanan, Perikanan (A)", "Pertambangan & Penggalian (B)", "Industri Pengolahan / Kerajinan (C)",
+            "Pengadaan Listrik, Gas, Uap (D)", "Pengelolaan Air, Sampah, Limbah (E)", "Konstruksi / Bangunan (F)",
+            "Perdagangan Besar & Eceran (G)", "Transportasi & Pergudangan (H)", "Penyediaan Akomodasi & Makan Minum / Warung (I)",
+            "Informasi & Komunikasi (J)", "Jasa Lainnya / Salon, Bengkel, Cuci (S)"
+        ];
+
+        function initDefaultSetup() {
+            addARTRow();
+            handleMakanSkalaChange();
+            renderNonMakanTableList();
+            calculateAll();
+            loadRecordsDashboard();
+            navigateWizard(1);
+        }
+
+        function switchMasterTab(tabId) {
+            playSfx('boing');
+            document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
+            
+            if(tabId === 'form-panel') {
+                document.getElementById('panel_form_container').classList.add('active');
+                document.getElementById('m_tab_form').classList.add('active');
+            } else {
+                document.getElementById('panel_dash_container').classList.add('active');
+                document.getElementById('m_tab_dash').classList.add('active');
+                loadRecordsDashboard();
+            }
+        }
+
+        function navigateWizard(targetStep) {
+            if(!isViewAllModeActive) playSfx('boing');
+            isViewAllModeActive = false;
+            document.getElementById('nav_btn_all').classList.remove('active');
+            
+            document.querySelectorAll('.modul-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.modul-section').forEach(sec => sec.classList.remove('show-tab'));
+            
+            const activeBtn = document.getElementById(`nav_btn_m${targetStep}`);
+            if(activeBtn) activeBtn.classList.add('active');
+            
+            const activeSec = document.getElementById(`sec_modul_m${targetStep}`);
+            if(activeSec) activeSec.classList.add('show-tab');
+
+            // Hitung Progress Bar Kartun
+            let pct = (targetStep / 6) * 100;
+            document.getElementById('comp_progress_bar').style.width = pct + '%';
+
+            document.querySelectorAll('.wizard-actions').forEach(wa => wa.style.display = 'flex');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleViewAllMode() {
+            playSfx('boing');
+            isViewAllModeActive = !isViewAllModeActive;
+            if(isViewAllModeActive) {
+                document.querySelectorAll('.modul-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('nav_btn_all').classList.add('active');
+                document.querySelectorAll('.modul-section').forEach(sec => sec.classList.add('show-tab'));
+                document.querySelectorAll('.wizard-actions').forEach(wa => wa.style.display = 'none');
+                document.getElementById('comp_progress_bar').style.width = '100%';
+            } else {
+                navigateWizard(1);
+            }
+        }
+
+        function togglePunyaUsahaLogic() {
+            let status = document.getElementById('switch_punya_usaha').value;
+            let wrapper = document.getElementById('wrapper_blok_usaha');
+            if (status === 'YA') {
+                wrapper.style.display = 'block';
+                if(usahaCount === 0) addUsahaRow();
+            } else {
+                wrapper.style.display = 'none';
+            }
+            playSfx('clink');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg; toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
+        function addARTRow(savedData = null) {
+            artCount++; const id = artCount;
+            const html = `
+                <div class="dynamic-row" id="art_row_${id}">
+                    <button type="button" class="btn-remove" onclick="this.parentElement.remove(); syncDropdownOptions(); calculateAll();">Hapus</button>
+                    <div class="form-group">
+                        <label>Nama Anggota Keluarga #${id}</label>
+                        <input type="text" id="art_nama_${id}" placeholder="Nama lengkap" oninput="syncDropdownOptions(); calculateAll();">
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Pekerjaan Utama</label><input type="text" id="art_kerja_${id}" placeholder="Karyawan Swasta" oninput="calculateAll()"></div>
+                        <div class="form-group"><label>Gaji Sebulan (Rp)</label><input type="number" id="art_gaji_${id}" placeholder="0" oninput="calculateAll()"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m1_art_container').insertAdjacentHTML('beforeend', html);
+            if(savedData) {
+                document.getElementById(`art_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`art_kerja_${id}`).value = savedData.kerja || '';
+                document.getElementById(`art_gaji_${id}`).value = savedData.gaji !== undefined ? savedData.gaji : '';
+            }
+            syncDropdownOptions();
+        }
+
+        function addPendapatanRow(savedData = null) {
+            pendapatanCount++; const id = pendapatanCount;
+            const html = `
+                <div class="dynamic-row" id="p_row_${id}">
+                    <button type="button" class="btn-remove" onclick="this.parentElement.remove(); calculateAll();">Hapus</button>
+                    <div class="form-group">
+                        <label>Anggota Keluarga Penerima Dana</label>
+                        <select id="p_pemilik_${id}" class="art-dropdown-select" onchange="calculateAll()"></select>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Sumber Dana</label><input type="text" id="p_nama_${id}" placeholder="Pensiunan Bulanan" oninput="calculateAll()"></div>
+                        <div class="form-group"><label>Nominal Sebulan (Rp)</label><input type="number" id="p_nominal_${id}" oninput="calculateAll()"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m2_pendapatan_container').insertAdjacentHTML('beforeend', html);
+            syncDropdownOptions();
+            if(savedData) {
+                document.getElementById(`p_pemilik_${id}`).value = savedData.pemilik || '';
+                document.getElementById(`p_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`p_nominal_${id}`).value = savedData.nominal || '';
+            }
+            calculateAll();
+        }
+
+        function addUsahaRow(savedData = null) {
+            usahaCount++; const id = usahaCount;
+            let kbliHtml = `<option value="">-- Pilih Lapangan Usaha --</option>`;
+            kbliOptions.forEach(opt => { kbliHtml += `<option value="${opt}">${opt}</option>`; });
+
+            const html = `
+                <div class="dynamic-row" id="u_row_${id}" style="border-color: var(--pop-blue); background:#f4f9ff;">
+                    <button type="button" class="btn-remove" onclick="this.parentElement.remove(); calculateAll();">Hapus Blok Usaha</button>
+                    <div style="font-weight: bold; font-size:13px; color:var(--pop-blue); margin-bottom:10px;">Unit Usaha Produktif #${id}</div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group"><label>Penanggung Jawab Usaha</label><select id="u_pj_${id}" class="art-dropdown-select" onchange="calculateAll()"></select></div>
+                        <div class="form-group"><label>Nama Usaha</label><input type="text" id="u_nama_${id}" placeholder="Warung Kelontong" oninput="calculateAll()"></div>
+                    </div>
+                    <div class="form-group"><label>Kategori (KBLI)</label><select id="u_kbli_${id}" onchange="calculateAll()">${kbliHtml}</select></div>
+                    <div class="form-group"><label>Komoditas Utama</label><input type="text" id="u_komoditas_${id}" placeholder="Beras, Snak dll" oninput="calculateAll()"></div>
+
+                    <div style="font-weight:bold; font-size:12px; margin-top:10px; color:#000;">Biaya Operasional Sensus (Skala Bulanan):</div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Bahan Baku (Rp)</label><input type="number" id="u_c_bahan_${id}" oninput="calculateAll()"></div>
+                        <div class="form-group"><label>Gaji Karyawan (Rp)</label><input type="number" id="u_c_gaji_${id}" oninput="calculateAll()"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Sewa/Listrik Air (Rp)</label><input type="number" id="u_c_ops_${id}" oninput="calculateAll()"></div>
+                        <div class="form-group"><label>Biaya Lainnya (Rp)</label><input type="number" id="u_c_non_${id}" oninput="calculateAll()"></div>
+                    </div>
+
+                    <div style="font-weight:bold; font-size:12px; margin-top:5px;">Omzet/Laba Dilaporkan:</div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Jenis Laba</label><select id="u_jenis_laba_input_${id}" onchange="calculateAll()"><option value="KOTOR">Laba Kotor (Omzet)</option><option value="BERSIH">Laba Bersih</option></select></div>
+                        <div class="form-group"><label>Nilai Sebulan (Rp)</label><input type="number" id="u_omzet_nilai_${id}" oninput="calculateAll()"></div>
+                    </div>
+
+                    <div style="font-size:11px; font-weight:700; margin-top:5px; background:white; padding:5px; border:1px solid #000;" id="u_info_output_${id}">Konversi Laba Bersih Sensus: Rp 0</div>
+                </div>
+            `;
+            document.getElementById('m3_usaha_container').insertAdjacentHTML('beforeend', html);
+            syncDropdownOptions();
+            if(savedData) {
+                document.getElementById(`u_pj_${id}`).value = savedData.pj || '';
+                document.getElementById(`u_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`u_kbli_${id}`).value = savedData.kbli || '';
+                document.getElementById(`u_komoditas_${id}`).value = savedData.komoditas || '';
+                document.getElementById(`u_c_bahan_${id}`).value = savedData.c_bahan || '';
+                document.getElementById(`u_c_gaji_${id}`).value = savedData.c_gaji || '';
+                document.getElementById(`u_c_ops_${id}`).value = savedData.c_ops || '';
+                document.getElementById(`u_c_non_${id}`).value = savedData.c_non || '';
+                document.getElementById(`u_jenis_laba_input_${id}`).value = savedData.jenis_laba_input || 'KOTOR';
+                document.getElementById(`u_omzet_nilai_${id}`).value = savedData.omzet_nilai || '';
+            }
+            calculateAll();
+        }
+
+        function syncDropdownOptions() {
+            const artSelects = document.querySelectorAll('.art-dropdown-select');
+            const names = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const idStr = row.id.replace('art_row_', '');
+                const val = document.getElementById(`art_nama_${idStr}`).value.trim();
+                if(val) names.push({ id: idStr, name: val });
+            });
+            artSelects.forEach(select => {
+                const curr = select.value;
+                let opt = `<option value="">-- Pilih Anggota --</option>`;
+                names.forEach(item => { opt += `<option value="${item.name}">${item.name}</option>`; });
+                select.innerHTML = opt; select.value = curr;
+            });
+        }
+
+        function handleMakanSkalaChange() {
+            const skala = document.getElementById('m4_makan_skala').value;
+            document.getElementById('m4_makan_input_label').innerText = `Nilai Rupiah Makan per ${skala} *`;
+            calculateMakanProjections();
+        }
+
+        function calculateMakanProjections() {
+            const skala = document.getElementById('m4_makan_skala').value;
+            const nilai = parseFloat(document.getElementById('m4_makan_nilai').value) || 0;
+            if(skala === 'Harian') globalMakanBulanan = nilai * 7 * 4;
+            else if(skala === 'Mingguan') globalMakanBulanan = nilai * 4;
+            else if(skala === 'Bulanan') globalMakanBulanan = nilai;
+        }
+
+        /* Logic Dorong Data ke Tabel List Sesuai Request */
+        function pushNonMakanToTableList() {
+            const nama = document.getElementById('add_nm_nama').value.trim();
+            const peri = document.getElementById('add_nm_periode').value;
+            const nomi = parseFloat(document.getElementById('add_nm_nominal').value) || 0;
+
+            if(!nama || nomi <= 0) { alert("Isi nama pengeluaran dan nominal dengan benar!"); return; }
+
+            nonMakanDataArray.push({ nama, periode: peri, nominal: nomi });
+            document.getElementById('add_nm_nama').value = '';
+            document.getElementById('add_nm_nominal').value = '';
+            
+            playSfx('clink');
+            renderNonMakanTableList();
+            calculateAll();
+        }
+
+        function removeNonMakanFromTableList(index) {
+            nonMakanDataArray.splice(index, 1);
+            playSfx('clink');
+            renderNonMakanTableList();
+            calculateAll();
+        }
+
+        function renderNonMakanTableList() {
+            const tbody = document.getElementById('tbody_nonmakan');
+            if (nonMakanDataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#999; font-size:12px;">Belum ada pengeluaran tambahan.</td></tr>`;
+                return;
+            }
+            let html = '';
+            nonMakanDataArray.forEach((item, index) => {
+                html += `
+                    <tr>
+                        <td>${item.nama}</td>
+                        <td>${item.periode}</td>
+                        <td>${formatRupiah(item.nominal)}</td>
+                        <td><button type="button" class="btn-remove" style="float:none; padding:2px 6px;" onclick="removeNonMakanFromTableList(${index})">❌</button></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function formatRupiah(num) { return 'Rp ' + Math.round(num).toLocaleString('id-ID'); }
+
+        function calculateAll() {
+            let totalArtSalaries = 0;
+            const artDataList = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('art_row_', '');
+                const nameVal = document.getElementById(`art_nama_${id}`).value.trim();
+                const kerjaVal = document.getElementById(`art_kerja_${id}`).value.trim();
+                const gajiVal = parseFloat(document.getElementById(`art_gaji_${id}`).value) || 0;
+                totalArtSalaries += gajiVal;
+                artDataList.push({ nama: nameVal, kerja: kerjaVal, gaji: gajiVal });
+            });
+
+            let totalOtherIncomes = 0;
+            const otherIncomesList = [];
+            document.getElementById('m2_pendapatan_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('p_row_', '');
+                const pemilik = document.getElementById(`p_pemilik_${id}`).value;
+                const nama = document.getElementById(`p_nama_${id}`).value;
+                const nominal = parseFloat(document.getElementById(`p_nominal_${id}`).value) || 0;
+                totalOtherIncomes += nominal;
+                otherIncomesList.push({ pemilik, nama, nominal });
+            });
+
+            let aggregateNetBusinessProfit = 0;
+            let totalUsahaDitemukan = 0;
+            
+            if (document.getElementById('switch_punya_usaha').value === 'YA') {
+                document.getElementById('m3_usaha_container').querySelectorAll('.dynamic-row').forEach(row => {
+                    const id = row.id.replace('u_row_', '');
+                    totalUsahaDitemukan++;
+
+                    const c_bahan = parseFloat(document.getElementById(`u_c_bahan_${id}`).value) || 0;
+                    const c_gaji = parseFloat(document.getElementById(`u_c_gaji_${id}`).value) || 0;
+                    const c_ops = parseFloat(document.getElementById(`u_c_ops_${id}`).value) || 0;
+                    const c_non = parseFloat(document.getElementById(`u_c_non_${id}`).value) || 0;
+                    const totalMonthlyCosts = c_bahan + c_gaji + c_ops + c_non;
+
+                    const jenisInput = document.getElementById(`u_jenis_laba_input_${id}`).value;
+                    const oNilai = parseFloat(document.getElementById(`u_omzet_nilai_${id}`).value) || 0;
+                    
+                    let netMonthlyProfit = 0;
+                    if (jenisInput === "KOTOR") {
+                        netMonthlyProfit = oNilai - totalMonthlyCosts;
+                    } else {
+                        netMonthlyProfit = oNilai;
+                    }
+
+                    document.getElementById(`u_info_output_${id}`).innerText = `Konversi Laba Bersih Sensus: ${formatRupiah(netMonthlyProfit)} / bulan`;
+                    aggregateNetBusinessProfit += netMonthlyProfit;
+                });
+            }
+
+            const inputListrikRaw = document.getElementById('m5_listrik_bulanan').value.trim();
+            const valListrik = parseFloat(inputListrikRaw) || 0;
+            document.getElementById('m5_listrik_warning_area').style.display = (valListrik < 45000 || inputListrikRaw === '') ? 'block' : 'none';
+
+            const inputInternetRaw = document.getElementById('m5_internet_bulanan').value.trim();
+            const valInternet = parseFloat(inputInternetRaw) || 0;
+            document.getElementById('m5_internet_warning_area').style.display = (inputInternetRaw === '0' || inputInternetRaw === '') ? 'block' : 'none';
+
+            // Hitung Total Pengeluaran Sesuai Struktur Aturan Khusus Modul 4
+            let screenSumBulanan = globalMakanBulanan + valListrik + valInternet;
+            let screenSumTahunan = 0;
+            let internalValidatorNonFoodMonthly = valListrik + valInternet;
+
+            nonMakanDataArray.forEach(item => {
+                if(item.periode === 'Bulanan') {
+                    screenSumBulanan += item.nominal;
+                    internalValidatorNonFoodMonthly += item.nominal;
+                } else {
+                    screenSumTahunan += item.nominal;
+                    internalValidatorNonFoodMonthly += (item.nominal / 12);
+                }
+            });
+
+            document.getElementById('mod4_total_bulanan_screen').innerText = formatRupiah(screenSumBulanan) + " / Bulan";
+            document.getElementById('mod4_total_tahunan_screen').innerText = formatRupiah(screenSumTahunan) + " Murni Tahunan";
+
+            const totalCombinedHouseholdExpensesValidator = globalMakanBulanan + internalValidatorNonFoodMonthly;
+            const globalTotalRevenue = totalArtSalaries + totalOtherIncomes + aggregateNetBusinessProfit;
+            const absoluteFinancialDelta = globalTotalRevenue - totalCombinedHouseholdExpensesValidator;
+
+            document.getElementById('v_tot_pendapatan').innerText = formatRupiah(totalArtSalaries + totalOtherIncomes);
+            document.getElementById('v_tot_laba_usaha').innerText = formatRupiah(aggregateNetBusinessProfit);
+            document.getElementById('v_tot_pengeluaran').innerText = formatRupiah(totalCombinedHouseholdExpensesValidator);
+            document.getElementById('v_selisih').innerText = formatRupiah(absoluteFinancialDelta);
+
+            // Perubahan Dialog Maskot Secara Lucu & Kasual Lapangan Sesuai Request
+            const maskotFace = document.getElementById('maskot_face');
+            const maskotDialog = document.getElementById('maskot_dialog_text');
+
+            if (absoluteFinancialDelta < 0) {
+                document.getElementById('sumber_penutup_group').style.display = 'block';
+                maskotFace.innerText = '😨';
+                maskotDialog.innerText = "Waduh tekor nih bos! Pengeluarannya kok lebih gede dari pendapatan? Coba tanyain lagi ke ibunya pake ilmu rahasia...";
+            } else {
+                document.getElementById('sumber_penutup_group').style.display = 'none';
+                maskotFace.innerText = '👍';
+                maskotDialog.innerText = "Mantap bosku! Itungannya pas. Kagak minus. Lanjut bungkus!";
+            }
+
+            generateNarrativeOutputText(artDataList, otherIncomesList, totalUsahaDitemukan, aggregateNetBusinessProfit, absoluteFinancialDelta, valListrik, valInternet, inputListrikRaw);
+        }
+
+        function generateNarrativeOutputText(art, incomes, totalUsaha, totalLabaUsaha, delta, listrik, internet, inputListrikRaw) {
+            const noRumah = document.getElementById('m1_no_rumah').value.trim();
+            if(!noRumah) {
+                document.getElementById('narrative_output').innerText = "Menunggu pengisian nomor bangunan di Bagian 1..."; return;
+            }
+
+            let text = `Hasil pencacahan pada keluarga di rumah nomor bangunan ${noRumah}. `;
+            if(art.length > 0) {
+                text += `Keluarga ini memiliki ${art.length} orang anggota keluarga. `;
+                art.forEach(p => {
+                    const name = p.nama || '(Tanpa Nama)';
+                    if(!p.kerja) text += `Sdr/i ${name} saat ini tidak bekerja. `;
+                    else text += `Sdr/i ${name} aktif bekerja sebagai ${p.kerja} dengan gaji ${formatRupiah(p.gaji)}/bulan. `;
+                });
+            }
+
+            if(incomes.length > 0) {
+                text += `Memperoleh kiriman sekunder berupa `;
+                incomes.forEach((inc, idx) => {
+                    text += `${inc.nama || 'Dana'} atas nama ${inc.pemilik || 'Anggota'} senilai ${formatRupiah(inc.nominal)}${idx === incomes.length - 1 ? '. ' : ', '}`;
+                });
+            }
+
+            if(document.getElementById('switch_punya_usaha').value === 'YA' && totalUsaha > 0) {
+                text += `Memiliki ${totalUsaha} unit usaha produktif dengan total laba bersih sensus ${formatRupiah(totalLabaUsaha)}/bulan. `;
+            }
+
+            text += `Pengeluaran utama listrik sebesar ${formatRupiah(listrik)}/bulan, internet sebesar ${formatRupiah(internet)}/bulan`;
+            if (nonMakanDataArray.length > 0) {
+                nonMakanDataArray.forEach(nf => {
+                    text += `, ${nf.nama} sebesar ${formatRupiah(nf.nominal)}/${nf.periode.toLowerCase()}`;
+                });
+            }
+            text += `. `;
+
+            if (listrik > 0 && listrik < 45000) text += `Konfirmasi listrik rendah: ${document.getElementById('m5_listrik_alasan').value || 'alasan lapangan'}. `;
+            else if (listrik === 0 || inputListrikRaw === '') text += `Konfirmasi listrik nihil: ${document.getElementById('m5_listrik_alasan').value || 'alasan lapangan'}. `;
+
+            if (internet === 0) text += `Konfirmasi internet nihil: ${document.getElementById('m5_internet_alasan').value || 'alasan lapangan'}. `;
+
+            if(delta < 0) text += `Defisit keuangan ditutup dari: ${document.getElementById('v_sumber_defisit').value || '(Belum dipilih)'}. `;
+            
+            const tambahan = document.getElementById('v_catatan_tambahan').value.trim();
+            if(tambahan) text += `Catatan tambahan: ${tambahan}.`;
+
+            document.getElementById('narrative_output').innerText = text;
+        }
+
+        function copyNarrative() {
+            const text = document.getElementById('narrative_output').innerText;
+            if(!text || text.startsWith("Menunggu pengisian")) return;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("✅ Catatan narasi berhasil disalin!");
+                playSfx('clink');
+            });
+        }
+
+        function triggerManualResetForm() {
+            if(confirm("Yakin mau hapus semua form master? Data yang belum di-save bakal ilang bos.")) {
+                nonMakanDataArray = [];
+                document.getElementById('m1_no_rumah').value = ''; document.getElementById('m1_no_hp').value = '';
+                document.getElementById('m4_makan_nilai').value = ''; document.getElementById('m5_listrik_bulanan').value = '';
+                document.getElementById('m5_listrik_alasan').value = ''; document.getElementById('m5_internet_bulanan').value = '';
+                document.getElementById('m5_internet_alasan').value = ''; document.getElementById('v_sumber_defisit').value = '';
+                document.getElementById('v_catatan_tambahan').value = '';
+                document.getElementById('m1_art_container').innerHTML = ''; document.getElementById('m2_pendapatan_container').innerHTML = '';
+                document.getElementById('m3_usaha_container').innerHTML = '';
+                document.getElementById('switch_punya_usaha').value = 'TIDAK';
+                document.getElementById('wrapper_blok_usaha').style.display = 'none';
+                artCount = 0; pendapatanCount = 0; usahaCount = 0; currentEditingId = null;
+                initDefaultSetup();
+                showToast("🧹 Form bersih total!");
+            }
+        }
+
+        function saveDataToStorage() {
+            const noRumah = document.getElementById('m1_no_rumah').value.trim();
+            if(!noRumah) { alert("Nomor Bangunan wajib diisi!"); navigateWizard(1); return; }
+
+            let records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            
+            const artData = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('art_row_', '');
+                artData.push({
+                    nama: document.getElementById(`art_nama_${id}`).value,
+                    kerja: document.getElementById(`art_kerja_${id}`).value,
+                    gaji: document.getElementById(`art_gaji_${id}`).value
+                });
+            });
+
+            const uData = [];
+            if(document.getElementById('switch_punya_usaha').value === 'YA') {
+                document.getElementById('m3_usaha_container').querySelectorAll('.dynamic-row').forEach(row => {
+                    const id = row.id.replace('u_row_', '');
+                    uData.push({
+                        pj: document.getElementById(`u_pj_${id}`).value,
+                        nama: document.getElementById(`u_nama_${id}`).value,
+                        kbli: document.getElementById(`u_kbli_${id}`).value,
+                        komoditas: document.getElementById(`u_komoditas_${id}`).value,
+                        c_bahan: document.getElementById(`u_c_bahan_${id}`).value,
+                        c_gaji: document.getElementById(`u_c_gaji_${id}`).value,
+                        c_ops: document.getElementById(`u_c_ops_${id}`).value,
+                        c_non: document.getElementById(`u_c_non_${id}`).value,
+                        jenis_laba_input: document.getElementById(`u_jenis_laba_input_${id}`).value,
+                        omzet_nilai: document.getElementById(`u_omzet_nilai_${id}`).value
+                    });
+                });
+            }
+
+            const pData = [];
+            document.getElementById('m2_pendapatan_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('p_row_', '');
+                pData.push({ pemilik: document.getElementById(`p_pemilik_${id}`).value, nama: document.getElementById(`p_nama_${id}`).value, nominal: document.getElementById(`p_nominal_${id}`).value });
+            });
+
+            const payload = {
+                id: currentEditingId || 'id_' + Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'), no_rumah: noRumah, no_hp: document.getElementById('m1_no_hp').value,
+                switch_punya_usaha: document.getElementById('switch_punya_usaha').value,
+                m4_makan_skala: document.getElementById('m4_makan_skala').value, m4_makan_nilai: document.getElementById('m4_makan_nilai').value,
+                m5_listrik_bulanan: document.getElementById('m5_listrik_bulanan').value, m5_listrik_alasan: document.getElementById('m5_listrik_alasan').value,
+                m5_internet_bulanan: document.getElementById('m5_internet_bulanan').value, m5_internet_alasan: document.getElementById('m5_internet_alasan').value,
+                sumber_defisit: document.getElementById('v_sumber_defisit').value, catatan_tambahan: document.getElementById('v_catatan_tambahan').value,
+                narrative: document.getElementById('narrative_output').innerText, artData, pData, uData, nonMakanDataArray
+            };
+
+            if(currentEditingId) records = records.map(r => r.id === currentEditingId ? payload : r);
+            else records.push(payload);
+
+            localStorage.setItem('se2026_records', JSON.stringify(records));
+            
+            // Efek Selebrasi Audio + Confetti Sesuai Kesepakatan Akhir
+            playSfx('tada');
+            triggerConfettiAnimation();
+            
+            alert("💾 Data keluarga sukses disimpan!");
+            currentEditingId = null;
+            triggerManualResetForm();
+            switchMasterTab('dash-panel');
+        }
+
+        function loadRecordsDashboard() {
+            const container = document.getElementById('records_list_container');
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            if(records.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color:#999; font-size:13px; padding:20px;">Belum ada keluarga terdata.</p>`; return;
+            }
+            let html = '';
+            records.forEach(rec => {
+                html += `
+                    <div class="record-item" style="border:3px solid #000; padding:12px; border-radius:8px; margin-bottom:10px; background:white; box-shadow:var(--shadow-flat-sm);">
+                        <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>🏠 No Bangunan: ${rec.no_rumah}</span><span style="font-size:11px;">${rec.timestamp}</span></div>
+                        <div style="font-size:12px; margin: 6px 0; color:#333;">${rec.narrative.substring(0, 80)}...</div>
+                        <div style="margin-top:10px;">
+                            <button class="btn-comic-primary" style="width:auto; padding:4px 10px; background:var(--pop-blue); color:white;" onclick="loadRecordIntoForm('${rec.id}')">🔄 Tarik Data</button>
+                            <button class="btn-remove" style="float:none;" onclick="deleteRecord('${rec.id}')">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function loadRecordIntoForm(id) {
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            const rec = records.find(r => r.id === id);
+            if(!rec) return;
+
+            nonMakanDataArray = rec.nonMakanDataArray || [];
+            document.getElementById('m1_art_container').innerHTML = '';
+            document.getElementById('m2_pendapatan_container').innerHTML = '';
+            document.getElementById('m3_usaha_container').innerHTML = '';
+            artCount = 0; pendapatanCount = 0; usahaCount = 0;
+
+            currentEditingId = rec.id;
+            document.getElementById('m1_no_rumah').value = rec.no_rumah || '';
+            document.getElementById('m1_no_hp').value = rec.no_hp || '';
+            document.getElementById('m4_makan_skala').value = rec.m4_makan_skala || 'Bulanan';
+            document.getElementById('m4_makan_nilai').value = rec.m4_makan_nilai || '';
+            document.getElementById('m5_listrik_bulanan').value = rec.m5_listrik_bulanan || '';
+            document.getElementById('m5_listrik_alasan').value = rec.m5_listrik_alasan || '';
+            document.getElementById('m5_internet_bulanan').value = rec.m5_internet_bulanan || '';
+            document.getElementById('m5_internet_alasan').value = rec.m5_internet_alasan || '';
+            document.getElementById('v_catatan_tambahan').value = rec.catatan_tambahan || '';
+            
+            document.getElementById('switch_punya_usaha').value = rec.switch_punya_usaha || 'TIDAK';
+            document.getElementById('wrapper_blok_usaha').style.display = (rec.switch_punya_usaha === 'YA') ? 'block' : 'none';
+
+            if(rec.artData) rec.artData.forEach(d => addARTRow(d));
+            if(rec.pData) rec.pData.forEach(d => addPendapatanRow(d));
+            if(rec.uData) rec.uData.forEach(d => addUsahaRow(d));
+
+            handleMakanSkalaChange(); calculateMakanProjections(); syncDropdownOptions();
+            renderNonMakanTableList();
+            if(rec.sumber_defisit) document.getElementById('v_sumber_defisit').value = rec.sumber_defisit;
+            
+            calculateAll(); 
+            switchMasterTab('form-panel');
+            toggleViewAllMode();
+        }
+
+        function deleteRecord(id) {
+            if(confirm("Beneran mau hapus data terdata ini?")) {
+                let records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+                records = records.filter(r => r.id !== id);
+                localStorage.setItem('se2026_records', JSON.stringify(records));
+                loadRecordsDashboard();
+                playSfx('clink');
+            }
+        }
+
+        function exportToCSV() {
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            if(records.length === 0) { alert("Data kosong, kagak ada yang bisa di-ekspor!"); return; }
+            let csv = "data:text/csv;charset=utf-8,ID,Timestamp,No_Bangunan,Makan,Listrik,Internet,Catatan_Narasi\n";
+            records.forEach(r => {
+                csv += `"${r.id}","${r.timestamp}","${r.no_rumah}",${r.m4_makan_nilai||0},${r.m5_listrik_bulanan||0},${r.m5_internet_bulanan||0},"${(r.narrative||'').replace(/"/g, '""')}"\n`;
+            });
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", `Ekspor_KangSensus_Pop_${Date.now()}.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
