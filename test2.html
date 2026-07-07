@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KangSensus Assistant - SE2026 Toolkit (Modern Professional Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1E3A8A;
+            --primary-light: #3B82F6;
+            --secondary: #F0F9FF;
+            --accent: #E0F2FE;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --bg-body: #F9FAFB;
+            --bg-card: #ffffff;
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding-bottom: 40px;
+        }
+
+        .font-cartoon {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Border gaya modern clean menggantikan gaya komik */
+        .comic-border {
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .comic-button {
+            border: 1px solid transparent;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .comic-button:active {
+            transform: translateY(1px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: #ffffff;
+        }
+
+        .master-nav {
+            display: flex;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .master-tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 5px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .master-tab.active {
+            color: #1E3A8A;
+            background-color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .sticky-modul-menu {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: #ffffff;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .sticky-modul-menu::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modul-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 20px;
+            background: #F3F4F6;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .modul-btn.active {
+            background: #1E3A8A;
+            color: #ffffff;
+        }
+
+        /* Perubahan All Mode: Navigasi meredup saat mode All Aktif */
+        .sticky-modul-menu.all-mode-active .modul-btn:not(.btn-all) {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #E5E7EB;
+            color: #9CA3AF;
+        }
+
+        .modul-btn.btn-all {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .modul-btn.btn-all.active {
+            background: #F59E0B;
+            color: #ffffff;
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .app-panel {
+            display: none;
+        }
+
+        .app-panel.active {
+            display: block;
+        }
+
+        .modul-section {
+            display: none;
+        }
+
+        .modul-section.show-tab {
+            display: block;
+        }
+
+        /* Sinkronisasi warna All Mode diatur murni lewat CSS agar tetap seragam */
+        .modul-section.show-tab .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1E3A8A;
+            margin-bottom: 16px;
+            border-left: 4px solid #3B82F6;
+            padding-left: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 13px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            background-color: #FAFAFA;
+            color: var(--text-main);
+            outline: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            background-color: #ffffff;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .dynamic-row {
+            background: #F9FAFB;
+            border: 1px dashed #9CA3AF;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .btn-remove {
+            background: #FEE2E2;
+            color: #DC2626;
+            border: 1px solid #FCA5A5;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+        .btn-remove:hover {
+            background: #DC2626;
+            color: #ffffff;
+        }
+
+        .btn-add {
+            background: #ffffff;
+            color: #3B82F6;
+            border: 1px dashed #3B82F6;
+            padding: 12px;
+            width: 100%;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-add:hover {
+            background: var(--secondary);
+        }
+
+        .comic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+        .comic-table th {
+            background-color: #F3F4F6;
+            border: 1px solid var(--border-color);
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        .comic-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 8px;
+            font-size: 13px;
+            background-color: #ffffff;
+        }
+        .comic-table select, .comic-table input {
+            padding: 8px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+
+        .days-checkbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+            background: #F3F4F6;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .day-label {
+            display: flex;
+            align-items: center;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .day-label:hover {
+            border-color: #3B82F6;
+        }
+
+        .day-label input {
+            margin-right: 6px;
+        }
+
+        .cost-row-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+        }
+
+        .wizard-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-wizard-back {
+            flex: 1;
+            background: #F3F4F6;
+            color: var(--text-main);
+            border: 1px solid #D1D5DB;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-wizard-back:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-wizard-next {
+            flex: 2;
+            background: #3B82F6;
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-wizard-next:hover {
+            background: #2563EB;
+        }
+
+        .btn-wizard-save {
+            flex: 2;
+            background: #10B981;
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-wizard-save:hover {
+            background: #059669;
+        }
+
+        .btn-form-clear {
+            background: #FFF1F2;
+            color: #E11D48;
+            border: 1px solid #FECDD3;
+            padding: 6px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            float: right;
+            transition: all 0.2s;
+        }
+        .btn-form-clear:hover {
+            background: #E11D48;
+            color: #ffffff;
+        }
+
+        .grid-2 {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .grid-col {
+            display: table-cell;
+            padding-right: 6px;
+        }
+
+        .grid-col:last-child {
+            padding-right: 0;
+            padding-left: 6px;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 6px 16px;
+            font-weight: 700;
+            font-size: 12px;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 14px;
+            border: 1px solid transparent;
+        }
+
+        .status-consistent {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .alert-danger-box {
+            background-color: #FEE2E2;
+            border: 1px solid #FCA5A5;
+            padding: 12px;
+            font-size: 12px;
+            color: #991B1B;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .alert-box {
+            background-color: #FEF3C7;
+            border: 1px dashed #F59E0B;
+            padding: 10px;
+            font-size: 11px;
+            color: #92400E;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            margin-top: 4px;
+        }
+
+        .metric-group {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #E5E7EB;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .narrative-box {
+            background: #F3F4F6;
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: var(--text-main);
+            min-height: 90px;
+            white-space: pre-wrap;
+            margin-bottom: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .btn-copy {
+            background: #3B82F6;
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 12px;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-copy:hover {
+            background: #2563EB;
+        }
+
+        .btn-share {
+            background: #10B981;
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 12px;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-share:hover {
+            background: #059669;
+        }
+
+        .record-item {
+            border: 1px solid var(--border-color);
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 13px;
+            color: #1E3A8A;
+            margin-bottom: 6px;
+        }
+
+        .btn-edit {
+            background: #E0F2FE;
+            color: #0369A1;
+            border: 1px solid #BAE6FD;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 6px;
+            transition: all 0.2s;
+        }
+        .btn-edit:hover {
+            background: #0369A1;
+            color: #ffffff;
+        }
+
+        .btn-del-rec {
+            background: #FEE2E2;
+            color: #DC2626;
+            border: 1px solid #FCA5A5;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-del-rec:hover {
+            background: #DC2626;
+            color: #ffffff;
+        }
+
+        .btn-backup {
+            background: #1E3A8A;
+            color: #ffffff;
+            border: 1px solid transparent;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 600;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-backup:hover {
+            background: #1D4ED8;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1F2937;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 99999;
+            display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* GERBANG KUNCI: MODAL OVERLAY LUXURY POPUP */
+        #password-gate-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: all 0.4s ease;
+        }
+    </style>
+</head>
+<body> 
+
+    <!-- GERBANG KUNCI (BERDIRI SENDIRI & TIDAK MEMBUNGKUS KONTEN UTAMA) -->
+    <div id="password-gate-overlay">
+        <div class="bg-white max-w-sm w-full rounded-2xl p-6 shadow-2xl border border-gray-100 text-center transform scale-100 transition-all duration-300">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce">
+                🔐
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 tracking-tight">Verifikasi Akses Toolkit</h2>
+            <p class="text-xs text-gray-500 mt-1 mb-5 font-medium">Perasaan anda jadi kang sensus?</p>
+            
+            <div class="text-left mb-4">
+                <input type="text" id="gate_password_input" placeholder="Ketik kata sandi di sini..." class="w-full !p-3 !text-sm !bg-gray-50 border border-gray-300 rounded-xl focus:!bg-white focus:!border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all text-center font-semibold text-gray-800">
+                <p id="gate_error_msg" class="text-rose-500 text-[11px] font-bold mt-2 text-center hidden">⚠️ Kata sandi salah, silakan coba lagi!</p>
+            </div>
+            
+            <button type="button" onclick="periksaPasswordGerbang()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm p-3 rounded-xl transition-all shadow-md shadow-blue-200 active:scale-[0.99]">
+                Masuk Sistem Sensus 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT UTAMA (TERPISAH SEHINGGA TIDAK MELAR LAGI) -->
+    <div id="main-content" class="hidden">
+        <header class="comic-border rounded-2xl p-5 m-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative">
+            <div class="flex items-center gap-4">
+                <div class="bg-white/20 w-14 h-14 rounded-full flex items-center justify-center text-2xl shrink-0">
+                    👦🏻
+                </div>
+                <div>
+                    <h1 class="font-cartoon text-xl tracking-wide">KangSensus Assistant</h1>
+                    <p id="bubble-speech" class="text-xs font-medium text-blue-100 opacity-90">Yuk semangat, entri modul demi data SE2026 Indonesia! 🎯</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-auto shrink-0 bg-white/10 p-2 rounded-xl border border-white/20">
+                <label class="block text-[10px] uppercase tracking-wider font-bold text-blue-200 mb-1">Nama Petugas Lapangan:</label>
+                <input type="text" id="nama_petugas_input" placeholder="Ketik namamu di sini..." oninput="updateNamaDanSalam()" class="w-full sm:w-44 !padding-[6px_10px] !text-xs !bg-white/20 !border-white/30 text-white placeholder-white/50 rounded-md focus:!bg-white focus:!text-gray-800">
+            </div>
+        </header>
+
+        <div class="master-nav">
+            <div id="m_tab_form" class="master-tab active" onclick="switchMasterTab('form-panel')">📝 Input Form Sensus</div>
+            <div id="m_tab_dash" class="master-tab" onclick="switchMasterTab('dash-panel')">🗂️ Data Terdata (Dashboard)</div>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <div id="panel_form_container" class="app-panel active">
+            
+            <div id="sticky_nav_bar" class="sticky-modul-menu">
+                <div id="nav_btn_m1" class="modul-btn active" onclick="navigateWizard(1)">Identitas & ART</div>
+                <div id="nav_btn_m2" class="modul-btn" onclick="navigateWizard(2)">Dana Sekunder</div>
+                <div id="nav_btn_m3" class="modul-btn" onclick="navigateWizard(3)">Unit Usaha</div>
+                <div id="nav_btn_m4" class="modul-btn" onclick="navigateWizard(4)">Pengeluaran</div>
+                <div id="nav_btn_m5" class="modul-btn" onclick="navigateWizard(5)">Validasi Finansial</div>
+                <div id="nav_btn_m6" class="modul-btn" onclick="navigateWizard(6)">Teks Narasi</div>
+                <div id="nav_btn_all" class="modul-btn btn-all" onclick="toggleViewAllMode()">👀 Tampilkan Semua</div>
+            </div>
+
+            <div class="container">
+                <div style="margin-bottom: 10px; overflow: hidden;">
+                    <button type="button" class="btn-form-clear" onclick="triggerManualResetForm()">🧹 Reset Form Master</button>
+                </div>
+
+                <div id="sec_modul_m1" class="modul-section show-tab">
+                    <div class="card">
+                        <div class="card-title">Identitas Keluarga & Bangunan</div>
+                        <div class="grid-2">
+                            <div class="grid-col">
+                                <div class="form-group">
+                                    <label>Nomor Bangunan *</label>
+                                    <input type="text" id="m1_no_rumah" placeholder="Contoh: 024B" oninput="calculateAll()">
+                                </div>
+                            </div>
+                            <div class="grid-col">
+                                <div class="form-group">
+                                    <label>No HP (Opsional)</label>
+                                    <input type="text" id="m1_no_hp" placeholder="08xxxxxxxxxx">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 8px; margin-bottom: 6px; font-size: 12px; font-weight: bold; color: var(--text-main);">Daftar Anggota Keluarga</div>
+                        <div id="m1_art_container"></div>
+                        <button type="button" class="btn-add" onclick="addARTRow()">➕ Tambah Anggota Keluarga</button>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m1">
+                        <button type="button" class="btn-wizard-next" onclick="navigateWizard(2)">Selanjutnya Dana Sekunder ➡️</button>
+                    </div>
+                </div>
+
+                <div id="sec_modul_m2" class="modul-section">
+                    <div class="card">
+                        <div class="card-title">Pendapatan Lainnya (Sekunder Keluarga)</div>
+                        <div id="m2_pendapatan_container"></div>
+                        <button type="button" class="btn-add" onclick="addPendapatanRow()">➕ Tambah Pendapatan Sekunder</button>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m2">
+                        <button type="button" class="btn-wizard-back" onclick="navigateWizard(1)">⬅️ Kembali</button>
+                        <button type="button" class="btn-wizard-next" onclick="navigateWizard(3)">Selanjutnya Unit Usaha ➡️</button>
+                    </div>
+                </div>
+
+                <div id="sec_modul_m3" class="modul-section">
+                    <div class="card">
+                        <div class="card-title">Sektor Multi Usaha Keluarga (Blok IV & V)</div>
+                        <div id="m3_usaha_container"></div>
+                        <button type="button" class="btn-add" onclick="addUsahaRow()">➕ Tambah Unit Usaha Baru</button>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m3">
+                        <button type="button" class="btn-wizard-back" onclick="navigateWizard(2)">⬅️ Kembali</button>
+                        <button type="button" class="btn-wizard-next" onclick="navigateWizard(4)">Selanjutnya Pengeluaran ➡️</button>
+                    </div>
+                </div>
+
+                <div id="sec_modul_m4" class="modul-section">
+                    <div class="card">
+                        <div class="card-title">Komponen Pengeluaran Keluarga</div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table class="comic-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 45%;">Jenis Pengeluaran Utama</th>
+                                        <th style="width: 25%;">Skala Periode</th>
+                                        <th style="width: 30%;">Nilai Uang (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-bold">A. Konsumsi Makanan *</td>
+                                        <td>
+                                            <select id="m4_makan_skala" onchange="handleMakanSkalaChange(); calculateAll();">
+                                                <option value="Harian">Harian</option>
+                                                <option value="Mingguan">Mingguan</option>
+                                                <option value="Bulanan" selected>Bulanan</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" id="m4_makan_nilai" placeholder="Nominal" oninput="calculateMakanProjections(); calculateAll();">
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA;">
+                                        <td colspan="3" style="padding: 4px 8px;">
+                                            <div id="row_proj_makan_hari" style="display:none; justify-content:space-between; font-size:10px; font-weight:bold; color:var(--text-muted);"><span>Est. Harian:</span><span id="proj_makan_hari_val">Rp 0</span></div>
+                                            <div id="row_proj_makan_minggu" style="display:none; justify-content:space-between; font-size:10px; font-weight:bold; color:var(--text-muted);"><span>Est. Mingguan:</span><span id="proj_makan_minggu_val">Rp 0</span></div>
+                                            <div id="row_proj_makan_bulan" style="display:none; justify-content:space-between; font-size:10px; font-weight:bold; color:var(--text-muted);"><span>Est. Bulanan:</span><span id="proj_makan_bulan_val">Rp 0</span></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="font-bold">B. Biaya Listrik *</td>
+                                        <td class="text-center font-bold text-gray-400 text-xs">Bulanan</td>
+                                        <td>
+                                            <input type="number" id="m5_listrik_bulanan" placeholder="Nominal" oninput="calculateAll()">
+                                        </td>
+                                    </tr>
+                                    <tr id="tr_listrik_warning" style="display:none;">
+                                        <td colspan="3">
+                                            <div class="alert-box">
+                                                <label style="font-size:10px; font-weight:bold;">Alasan pengeluaran listrik rendah/kosong *</label>
+                                                <input type="text" id="m5_listrik_alasan" placeholder="Misal: Subsidi meteran bareng ortu" oninput="calculateAll()">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="font-bold">C. Biaya Internet *</td>
+                                        <td class="text-center font-bold text-gray-400 text-xs">Bulanan</td>
+                                        <td>
+                                            <input type="number" id="m5_internet_bulanan" placeholder="0 jika tiada" oninput="calculateAll()">
+                                        </td>
+                                    </tr>
+                                    <tr id="tr_internet_warning" style="display:none;">
+                                        <td colspan="3">
+                                            <div class="alert-box">
+                                                <label style="font-size:10px; font-weight:bold;">Alasan biaya internet nihil *</label>
+                                                <input type="text" id="m5_internet_alasan" placeholder="Misal: Tidak memakai HP pintar" oninput="calculateAll()">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="font-size: 12px; font-weight: bold; margin-top: 15px; margin-bottom: 6px;">D. Komponen Pengeluaran Non-Makanan Tambahan</div>
+                        <div style="overflow-x: auto;">
+                            <table class="comic-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40%;">Nama Pengeluaran Tambahan</th>
+                                        <th style="width: 25%;">Skala</th>
+                                        <th style="width: 25%;">Nominal (Rp)</th>
+                                        <th style="width: 10%;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="m5_nonmakan_table_body"></tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn-add" style="margin-top: 4px;" onclick="addNonMakanRow()">➕ Tambah Baris Pengeluaran Non-Makanan</button>
+
+                        <div class="metric-group" style="background-color: #fff; margin-top:15px; border: 1px solid var(--border-color);">
+                            <div style="font-size:11px; font-weight:bold; margin-bottom:4px;">📊 Ringkasan Kelompok Pengeluaran:</div>
+                            <div class="metric-row"><span>Total Pengeluaran Skala Bulanan:</span><span id="mod4_total_bulanan_screen" style="font-weight:bold; color: #1E3A8A;">Rp 0 / Bulan</span></div>
+                            <div class="metric-row"><span>Total Pengeluaran Skala Tahunan:</span><span id="mod4_total_tahunan_screen" style="font-weight:bold; color: #1E3A8A;">Rp 0 / Tahun</span></div>
+                        </div>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m4">
+                        <button type="button" class="btn-wizard-back" onclick="navigateWizard(3)">⬅️ Kembali</button>
+                        <button type="button" class="btn-wizard-next" onclick="navigateWizard(5)">Selanjutnya Validasi Finansial ➡️</button>
+                    </div>
+                </div>
+
+                <div id="sec_modul_m5" class="modul-section">
+                    <div class="card">
+                        <div class="card-title">Sistem Analisis Validasi Finansial</div>
+                        
+                        <div id="validation_badge_container">
+                            <div id="status_badge" class="badge-status status-consistent">🟢 Data Consistent</div>
+                        </div>
+                        <div id="validation_alerts"></div>
+
+                        <div class="metric-group">
+                            <div class="metric-row"><span>Total Gaji Keluarga + Sekunder (Bulanan):</span><span id="v_tot_pendapatan">Rp 0</span></div>
+                            <div class="metric-row"><span>Total Laba Bersih Sektor Usaha (Bulanan):</span><span id="v_tot_laba_usaha">Rp 0</span></div>
+                            <div class="metric-row"><span>Total Pengeluaran Rumah Tangga (Est. Bulanan):</span><span id="v_tot_pengeluaran">Rp 0</span></div>
+                            <div class="metric-row" style="border-top:1px solid var(--border-color); padding-top:6px;"><span>Selisih Neraca Lapangan (Sisa/Defisit):</span><span id="v_selisih" style="font-weight:bold;">Rp 0</span></div>
+                        </div>
+
+                        <div class="form-group" id="sumber_penutup_group" style="display: none;">
+                            <label style="color: #EF4444; font-weight: bold;">⚠️ Sumber Penutup Defisit Finansial Lapangan *</label>
+                            <select id="v_sumber_defisit" onchange="calculateAll()">
+                                <option value="">-- Pilih Sumber Penutup --</option>
+                                <option value="Hutang / Pinjaman dari Kerabat atau Bank">Hutang / Pinjaman dari Kerabat atau Bank</option>
+                                <option value="Menggunakan Tabungan Sebelumnya">Menggunakan Tabungan Sebelumnya</option>
+                                <option value="Bantuan Sosial Terstruktur (Bansos / PKH)">Bantuan Sosial Terstruktur (Bansos / PKH)</option>
+                                <option value="Kiriman Regular Anak / Sanak Saudara diluar Keluarga">Kiriman Regular Anak / Sanak Saudara diluar Keluarga</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Catatan Tambahan Kondisi Lapangan (Opsional)</label>
+                            <textarea id="v_catatan_tambahan" rows="2" placeholder="Keterangan anomali..." oninput="calculateAll()"></textarea>
+                        </div>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m5">
+                        <button type="button" class="btn-wizard-back" onclick="navigateWizard(4)">⬅️ Kembali</button>
+                        <button type="button" class="btn-wizard-next" onclick="navigateWizard(6)">Selanjutnya Teks Narasi ➡️</button>
+                    </div>
+                </div>
+
+                <div id="sec_modul_m6" class="modul-section">
+                    <div class="card">
+                        <div class="card-title">Narasi Teks Catatan Lapangan Otomatis</div>
+                        <div id="narrative_output" class="narrative-box">Status saat ini menunggu pengisian nomor bangunan di Modul 1.</div>
+                        
+                        <div class="grid flex gap-2">
+                            <button type="button" class="btn-copy flex-1" onclick="copyNarrative()">📋 Salin Teks Narasi</button>
+                            <button type="button" class="btn-share flex-1" onclick="shareNarrative()">🔗 Bagikan Narasi</button>
+                        </div>
+                    </div>
+                    <div class="wizard-actions" id="wiz_act_m6">
+                        <button type="button" class="btn-wizard-back" onclick="navigateWizard(5)">⬅️ Kembali</button>
+                        <button type="button" class="btn-wizard-save" onclick="saveDataToStorage()">💾 Simpan Responden</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="panel_dash_container" class="app-panel">
+            <div class="container">
+                <div class="card">
+                    <div class="card-title">Daftar Keluarga Berhasil Terdata</div>
+                    <button class="btn-backup" onclick="exportToCSV()">📊 Ekspor Data CSV Excel</button>
+                    <div id="records_list_container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let artCount = 0;
+        let pendapatanCount = 0;
+        let usahaCount = 0;
+        let nonMakanCount = 0;
+        let currentEditingId = null;
+
+        let globalMakanBulanan = 0;
+        let isViewAllModeActive = false;
+
+        // AUDIO ENGINE RESOURCES (EFEK SUARA RENYAH, MANTAP, VOLUME PROPORSIONAL)
+        const soundClick = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav'); 
+        const soundSuccess = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav'); 
+        const soundError = new Audio('https://assets.mixkit.co/active_storage/sfx/959/959-84.wav');
+
+        // Atur level volume agar mantap dan tidak kekecilan
+        soundClick.volume = 0.85;
+        soundSuccess.volume = 0.90;
+        soundError.volume = 0.85;
+
+        function playClickSound() {
+            soundClick.currentTime = 0;
+            soundClick.play().catch(e => console.log("Audio play blocked:", e));
+        }
+
+        function playSuccessSound() {
+            soundSuccess.currentTime = 0;
+            soundSuccess.play().catch(e => console.log("Audio play blocked:", e));
+        }
+
+        // FUNGSI VERIFIKASI GERBANG KUNCI MODERN MODAL POPUP
+        function periksaPasswordGerbang() {
+            const inputVal = document.getElementById('gate_password_input').value;
+            if (inputVal === "mumet") {
+                soundSuccess.currentTime = 0;
+                soundSuccess.play().catch(e => console.log("Audio play blocked:", e));
+                document.getElementById('password-gate-overlay').style.display = 'none';
+                document.getElementById('main-content').classList.remove('hidden');
+            } else {
+                soundError.currentTime = 0;
+                soundError.play().catch(e => console.log("Audio play blocked:", e));
+                document.getElementById('gate_error_msg').classList.remove('hidden');
+                document.getElementById('gate_password_input').value = '';
+                document.getElementById('gate_password_input').focus();
+            }
+        }
+
+        // Jalankan trigger enter pada form password
+        document.getElementById('gate_password_input').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                periksaPasswordGerbang();
+            }
+        });
+
+        // AUTOMATION: Menyematkan event listener suara klik ke seluruh button yang di-klik user
+        document.addEventListener('click', function(e) {
+            if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.classList.contains('master-tab') || e.target.classList.contains('modul-btn'))) {
+                playClickSound();
+            }
+        });
+
+        function updateNamaDanSalam() {
+            const inputElement = document.getElementById('nama_petugas_input');
+            let nama = inputElement.value.trim();
+            
+            if(!nama) {
+                nama = "Rekan Sensus";
+            } else {
+                localStorage.setItem('se2026_nama_petugas', nama);
+            }
+
+            const currentHour = new Date().getHours();
+            let sapaan = "";
+
+            if (currentHour >= 4 && currentHour < 10) {
+                sapaan = `Selamat Pagi, ${nama}! Semangat fajar data SE2026! 🌅`;
+            } else if (currentHour >= 10 && currentHour < 15) {
+                sapaan = `Selamat Siang, ${nama}! Tetap fokus jalani tugas lapangan ya! ☀️`;
+            } else if (currentHour >= 15 && currentHour < 18) {
+                sapaan = `Selamat Sore, ${nama}! Kejar target responden hari ini, yuk! 🌤️`;
+            } else {
+                sapaan = `Selamat Malam, ${nama}! Istirahat yang cukup atau lanjut lembur estetik? 🌙`;
+            }
+
+            document.getElementById('bubble-speech').innerText = sapaan;
+        }
+
+        const kbliOptions = [
+            "Pertanian, Kehutanan, Perikanan (A)", "Pertambangan & Penggalian (B)", "Industri Pengolahan / Craft (C)",
+            "Pengadaan Listrik, Gas, Uap (D)", "Pengelolaan Air, Sampah, Limbah (E)", "Konstruksi / Bangunan (F)",
+            "Perdagangan Besar & Eceran (G)", "Transportasi & Pergudangan (H)", "Penyediaan Akomodasi & Makan Minum / Warung (I)",
+            "Informasi & Komunikasi (J)", "Jasa Lainnya / Salon, Bengkel, Cuci (S)"
+        ];
+
+        const daysOfWeekList = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+
+        window.addEventListener('DOMContentLoaded', () => { 
+            const cachedNama = localStorage.getItem('se2026_nama_petugas');
+            if (cachedNama) {
+                document.getElementById('nama_petugas_input').value = cachedNama;
+            }
+            updateNamaDanSalam();
+            initDefaultSetup(); 
+            document.getElementById('gate_password_input').focus();
+        });
+
+        function initDefaultSetup() {
+            addARTRow();
+            addNonMakanRow();
+            handleMakanSkalaChange();
+            calculateAll();
+            loadRecordsDashboard();
+            navigateWizard(1); 
+        }
+
+        function switchMasterTab(tabId) {
+            document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
+            
+            if(tabId === 'form-panel') {
+                document.getElementById('panel_form_container').classList.add('active');
+                document.getElementById('m_tab_form').classList.add('active');
+            } else {
+                document.getElementById('panel_dash_container').classList.add('active');
+                document.getElementById('m_tab_dash').classList.add('active');
+                loadRecordsDashboard();
+            }
+        }
+
+        function navigateWizard(targetStep) {
+            isViewAllModeActive = false;
+            document.getElementById('nav_btn_all').classList.remove('active');
+            document.getElementById('sticky_nav_bar').classList.remove('all-mode-active');
+            
+            document.querySelectorAll('.modul-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.modul-section').forEach(sec => sec.classList.remove('show-tab'));
+            
+            let key = 'm' + targetStep;
+            if(targetStep === 4) key = 'm4';
+            if(targetStep === 5) key = 'm5';
+            if(targetStep === 6) key = 'm6';
+            
+            const activeBtn = document.getElementById(`nav_btn_${key}`);
+            if(activeBtn) activeBtn.classList.add('active');
+            
+            const activeSec = document.getElementById(`sec_modul_${key}`);
+            if(activeSec) activeSec.classList.add('show-tab');
+
+            document.querySelectorAll('.wizard-actions').forEach(wa => wa.style.display = 'flex');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleViewAllMode() {
+            isViewAllModeActive = !isViewAllModeActive;
+            if(isViewAllModeActive) {
+                document.querySelectorAll('.modul-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('nav_btn_all').classList.add('active');
+                document.getElementById('sticky_nav_bar').classList.add('all-mode-active');
+                document.querySelectorAll('.modul-section').forEach(sec => sec.classList.add('show-tab'));
+                document.querySelectorAll('.wizard-actions').forEach(wa => wa.style.display = 'none');
+            } else {
+                navigateWizard(1);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg; toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2050);
+        }
+
+        function addARTRow(savedData = null) {
+            artCount++; const id = artCount;
+            const html = `
+                <div class="dynamic-row" id="art_row_${id}">
+                    <button type="button" class="btn-remove" onclick="removeARTRow(${id})">Hapus</button>
+                    <div class="form-group">
+                        <label>Nama Anggota Keluarga #${id}</label>
+                        <input type="text" id="art_nama_${id}" placeholder="Nama lengkap" oninput="syncDropdownOptions(); calculateAll();">
+                    </div>
+                    <div class="grid-2">
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Pekerjaan Utama</label>
+                                <input type="text" id="art_kerja_${id}" placeholder="Misal: Karyawan Swasta" oninput="calculateAll()">
+                            </div>
+                        </div>
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Gaji Sebulan (Rp)</label>
+                                <input type="number" id="art_gaji_${id}" placeholder="0 jika tiada gaji" oninput="calculateAll()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m1_art_container').insertAdjacentHTML('beforeend', html);
+            if(savedData) {
+                document.getElementById(`art_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`art_kerja_${id}`).value = savedData.kerja || '';
+                document.getElementById(`art_gaji_${id}`).value = savedData.gaji !== undefined ? savedData.gaji : '';
+            }
+            syncDropdownOptions();
+        }
+
+        function removeARTRow(id) {
+            const row = document.getElementById(`art_row_${id}`);
+            if(row) { row.remove(); syncDropdownOptions(); calculateAll(); }
+        }
+
+        function addPendapatanRow(savedData = null) {
+            pendapatanCount++; const id = pendapatanCount;
+            const html = `
+                <div class="dynamic-row" id="p_row_${id}">
+                    <button type="button" class="btn-remove" onclick="removePendapatanRow(${id})">Hapus</button>
+                    <div class="form-group">
+                        <label>Anggota Keluarga Penerima Dana</label>
+                        <select id="p_pemilik_${id}" class="art-dropdown-select" onchange="calculateAll()"></select>
+                    </div>
+                    <div class="grid-2">
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Jenis Sumber Dana</label>
+                                <input type="text" id="p_nama_${id}" placeholder="Misal: Pensiunan Bulanan" oninput="calculateAll()">
+                            </div>
+                        </div>
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Nominal Per Bulan (Rp)</label>
+                                <input type="number" id="p_nominal_${id}" oninput="calculateAll()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m2_pendapatan_container').insertAdjacentHTML('beforeend', html);
+            syncDropdownOptions();
+            if(savedData) {
+                document.getElementById(`p_pemilik_${id}`).value = savedData.pemilik || '';
+                document.getElementById(`p_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`p_nominal_${id}`).value = savedData.nominal || '';
+            }
+            calculateAll();
+        }
+
+        function removePendapatanRow(id) {
+            const row = document.getElementById(`p_row_${id}`);
+            if(row) { row.remove(); calculateAll(); }
+        }
+
+        function addUsahaRow(savedData = null) {
+            usahaCount++; const id = usahaCount;
+            let kbliHtml = `<option value="">-- Pilih Lapangan Usaha --</option>`;
+            kbliOptions.forEach(opt => { kbliHtml += `<option value="${opt}">${opt}</option>`; });
+
+            let checkboxDaysHtml = '';
+            daysOfWeekList.forEach(day => {
+                checkboxDaysHtml += `<label class="day-label"><input type="checkbox" class="u-day-cb-${id}" value="${day}" onchange="calculateAll()"> ${day}</label>`;
+            });
+
+            const html = `
+                <div class="dynamic-row" id="u_row_${id}" style="border: 1px solid var(--border-color); background: #ffffff;">
+                    <button type="button" class="btn-remove" onclick="removeUsahaRow(${id})">Hapus Blok Usaha</button>
+                    <div style="font-weight: bold; font-size:12px; color: var(--text-main); margin-bottom: 6px;">Unit Usaha Produktif #${id}</div>
+                    
+                    <div class="grid-2">
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Penanggung Jawab Usaha</label>
+                                <select id="u_pj_${id}" class="art-dropdown-select" onchange="calculateAll()"></select>
+                            </div>
+                        </div>
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Nama Usaha</label>
+                                <input type="text" id="u_nama_${id}" placeholder="Warung / Industri" oninput="calculateAll()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori Lapangan Usaha (KBLI)</label>
+                        <select id="u_kbli_${id}" onchange="calculateAll()">${kbliHtml}</select>
+                    </div>
+                    <div class="form-group">
+                        <label>Komoditas Utama</label>
+                        <input type="text" id="u_komoditas_${id}" placeholder="Produk dominan" oninput="calculateAll()">
+                    </div>
+
+                    <div style="font-weight: bold; font-size:11px; margin-top:8px; border-top: 1px dashed var(--border-color); padding-top:4px;">Komponen Biaya Operasional Sensus:</div>
+                    
+                    <div class="cost-row-box">
+                        <div class="grid-2">
+                            <div class="grid-col"><div class="form-group"><label>Kulakan / Bahan Baku (Rp)</label><input type="number" id="u_c_bahan_v_${id}" oninput="calculateAll()"></div></div>
+                            <div class="grid-col"><div class="form-group"><label>Skala Periode</label><select id="u_c_bahan_p_${id}" onchange="toggleCostDays(${id}, 'bahan'); calculateAll();"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan" selected>Bulanan</option><option value="Tahunan">Tahunan</option></select></div></div>
+                        </div>
+                        <div id="u_c_days_bahan_grp_${id}" style="display:none;"><label style="font-size:10px;">Pilih Hari Keluar Biaya Bahan:</label><div class="days-checkbox-grid">${checkboxDaysHtml.replace(/class="u-day-cb-/g, `class="u-day-cb-bahan-`)}</div></div>
+                    </div>
+
+                    <div class="cost-row-box">
+                        <div class="grid-2">
+                            <div class="grid-col"><div class="form-group"><label>Gaji Karyawan Usaha (Rp)</label><input type="number" id="u_c_gaji_v_${id}" oninput="calculateAll()"></div></div>
+                            <div class="grid-col"><div class="form-group"><label>Skala Periode</label><select id="u_c_gaji_p_${id}" onchange="toggleCostDays(${id}, 'gaji'); calculateAll();"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan" selected>Bulanan</option><option value="Tahunan">Tahunan</option></select></div></div>
+                        </div>
+                        <div id="u_c_days_gaji_grp_${id}" style="display:none;"><label style="font-size:10px;">Pilih Hari Pembayaran Gaji:</label><div class="days-checkbox-grid">${checkboxDaysHtml.replace(/class="u-day-cb-/g, `class="u-day-cb-gaji-`)}</div></div>
+                    </div>
+
+                    <div class="cost-row-box">
+                        <div class="grid-2">
+                            <div class="grid-col"><div class="form-group"><label>Sewa, Listrik & Air Usaha (Rp)</label><input type="number" id="u_c_ops_v_${id}" oninput="calculateAll()"></div></div>
+                            <div class="grid-col"><div class="form-group"><label>Skala Periode</label><select id="u_c_ops_p_${id}" onchange="toggleCostDays(${id}, 'ops'); calculateAll();"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan" selected>Bulanan</option><option value="Tahunan">Tahunan</option></select></div></div>
+                        </div>
+                        <div id="u_c_days_ops_grp_${id}" style="display:none;"><label style="font-size:10px;">Pilih Hari Operasional Biaya:</label><div class="days-checkbox-grid">${checkboxDaysHtml.replace(/class="u-day-cb-/g, `class="u-day-cb-ops-`)}</div></div>
+                    </div>
+
+                    <div class="cost-row-box">
+                        <div class="grid-2">
+                            <div class="grid-col"><div class="form-group"><label>Biaya Lainnya (Rp)</label><input type="number" id="u_c_non_v_${id}" oninput="calculateAll()"></div></div>
+                            <div class="grid-col"><div class="form-group"><label>Skala Periode</label><select id="u_c_non_p_${id}" onchange="toggleCostDays(${id}, 'non'); calculateAll();"><option value="Harian">Harian</option><option value="Mingguan">Mingguan</option><option value="Bulanan" selected>Bulanan</option><option value="Tahunan">Tahunan</option></select></div></div>
+                        </div>
+                        <div id="u_c_days_non_grp_${id}" style="display:none;"><label style="font-size:10px;">Pilih Hari Pengeluaran Lain:</label><div class="days-checkbox-grid">${checkboxDaysHtml.replace(/class="u-day-cb-/g, `class="u-day-cb-non-`)}</div></div>
+                    </div>
+
+                    <div style="font-weight: bold; font-size:11px; margin-top:8px; border-top: 1px dashed var(--border-color); padding-top:4px;">Pendapatan / Omzet Usaha Responden:</div>
+                    <div class="form-group">
+                        <label>Pendapatan Yang Diingat/Dilaporkan *</label>
+                        <select id="u_jenis_laba_input_${id}" onchange="calculateAll()">
+                            <option value="KOTOR">Laba Kotor / Omzet Total Penjualan</option>
+                            <option value="BERSIH">Laba Bersih Sisa Keuntungan Bersih</option>
+                        </select>
+                    </div>
+                    <div class="grid-2">
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Skala Periode Omzet</label>
+                                <select id="u_omzet_periode_${id}" onchange="toggleOmzetDays(${id}); calculateAll();">
+                                    <option value="Harian">Harian</option>
+                                    <option value="Mingguan">Mingguan</option>
+                                    <option value="Bulanan" selected>Bulanan</option>
+                                    <option value="Tahunan">Tahunan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid-col">
+                            <div class="form-group">
+                                <label>Nilai Uang (Rp)</label>
+                                <input type="number" id="u_omzet_nilai_${id}" placeholder="Nominal" oninput="calculateAll()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="u_omzet_days_grp_${id}" style="display:none;">
+                        <label>Pilih Hari Buka Operasional Toko/Usaha dalam Seminggu *</label>
+                        <div class="days-checkbox-grid">
+                            ${checkboxDaysHtml.replace(/class="u-day-cb-/g, `class="u-day-cb-omzet-`)}
+                        </div>
+                    </div>
+
+                    <div class="metric-group" style="background-color: #ffffff; margin-top:10px; border: 1px solid var(--border-color);">
+                        <div style="font-size:10px; font-weight:bold;">Hasil Proyeksi Konversi Sistem Otomatis:</div>
+                        <div class="metric-row"><span>Total Biaya Operasional Bulanan:</span><span id="u_calc_biaya_${id}">Rp 0</span></div>
+                        <div class="metric-row"><span>Estimasi Laba Kotor Bulanan:</span><span id="u_calc_omzet_${id}">Rp 0</span></div>
+                        <div class="metric-row"><span>Estimasi Laba Bersih Bulanan:</span><span id="u_calc_laba_${id}">Rp 0</span></div>
+                        <div class="metric-row" style="color: var(--text-main); border-top:1px dashed var(--border-color); padding-top:4px;"><span>Estimasi Laba Kotor TAHUNAN:</span><span id="u_calc_omzet_thn_${id}" style="font-weight:bold;">Rp 0</span></div>
+                        <div class="metric-row" style="color: var(--text-main);"><span>Estimasi Laba Bersih TAHUNAN:</span><span id="u_calc_laba_thn_${id}" style="font-weight:bold;">Rp 0</span></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('m3_usaha_container').insertAdjacentHTML('beforeend', html);
+            syncDropdownOptions();
+            
+            if(savedData) {
+                document.getElementById(`u_pj_${id}`).value = savedData.pj || '';
+                document.getElementById(`u_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`u_kbli_${id}`).value = savedData.kbli || '';
+                document.getElementById(`u_komoditas_${id}`).value = savedData.komoditas || '';
+                
+                document.getElementById(`u_c_bahan_v_${id}`).value = savedData.c_bahan_v || '';
+                document.getElementById(`u_c_bahan_p_${id}`).value = savedData.c_bahan_p || 'Bulanan';
+                document.getElementById(`u_c_gaji_v_${id}`).value = savedData.c_gaji_v || '';
+                document.getElementById(`u_c_gaji_p_${id}`).value = savedData.c_gaji_p || 'Bulanan';
+                document.getElementById(`u_c_ops_v_${id}`).value = savedData.c_ops_v || '';
+                document.getElementById(`u_c_ops_p_${id}`).value = savedData.c_ops_p || 'Bulanan';
+                document.getElementById(`u_c_non_v_${id}`).value = savedData.c_non_v || '';
+                document.getElementById(`u_c_non_p_${id}`).value = savedData.c_non_p || 'Bulanan';
+
+                if(savedData.jenis_laba_input) document.getElementById(`u_jenis_laba_input_${id}`).value = savedData.jenis_laba_input;
+                document.getElementById(`u_omzet_periode_${id}`).value = savedData.omzet_periode || 'Bulanan';
+                document.getElementById(`u_omzet_nilai_${id}`).value = savedData.omzet_nilai || '';
+
+                if(savedData.cb_days_bahan) populateCheckboxState(`u-day-cb-bahan-${id}`, savedData.cb_days_bahan);
+                if(savedData.cb_days_gaji) populateCheckboxState(`u-day-cb-gaji-${id}`, savedData.cb_days_gaji);
+                if(savedData.cb_days_ops) populateCheckboxState(`u-day-cb-ops-${id}`, savedData.cb_days_ops);
+                if(savedData.cb_days_non) populateCheckboxState(`u-day-cb-non-${id}`, savedData.cb_days_non);
+                if(savedData.cb_days_omzet) populateCheckboxState(`u-day-cb-omzet-${id}`, savedData.cb_days_omzet);
+            }
+
+            toggleCostDays(id, 'bahan'); toggleCostDays(id, 'gaji');
+            toggleCostDays(id, 'ops'); toggleCostDays(id, 'non');
+            toggleOmzetDays(id);
+            calculateAll();
+        }
+
+        function removeUsahaRow(id) {
+            const row = document.getElementById(`u_row_${id}`);
+            if(row) { row.remove(); calculateAll(); }
+        }
+
+        function toggleCostDays(id, type) {
+            const p = document.getElementById(`u_c_${type}_p_${id}`).value;
+            document.getElementById(`u_c_days_${type}_grp_${id}`).style.display = (p === 'Harian') ? 'block' : 'none';
+        }
+
+        function toggleOmzetDays(id) {
+            const p = document.getElementById(`u_omzet_periode_${id}`).value;
+            document.getElementById(`u_omzet_days_grp_${id}`).style.display = (p === 'Harian') ? 'block' : 'none';
+        }
+
+        function getCheckedDaysList(className) {
+            return Array.from(document.querySelectorAll(`.${className}:checked`)).map(cb => cb.value);
+        }
+
+        function populateCheckboxState(className, daysArray) {
+            document.querySelectorAll(`.${className}`).forEach(cb => {
+                if(daysArray.includes(cb.value)) cb.checked = true;
+            });
+        }
+
+        function handleMakanSkalaChange() {
+            calculateMakanProjections();
+        }
+
+        function calculateMakanProjections() {
+            const skala = document.getElementById('m4_makan_skala').value;
+            const nilai = parseFloat(document.getElementById('m4_makan_nilai').value) || 0;
+
+            document.getElementById('row_proj_makan_hari').style.display = 'none';
+            document.getElementById('row_proj_makan_minggu').style.display = 'none';
+            document.getElementById('row_proj_makan_bulan').style.display = 'none';
+
+            if(skala === 'Harian') {
+                globalMakanBulanan = nilai * 7 * 4;
+                document.getElementById('proj_makan_minggu_val').innerText = formatRupiah(nilai * 7);
+                document.getElementById('proj_makan_bulan_val').innerText = formatRupiah(globalMakanBulanan);
+                document.getElementById('row_proj_makan_minggu').style.display = 'flex';
+                document.getElementById('row_proj_makan_bulan').style.display = 'flex';
+            } 
+            else if(skala === 'Mingguan') {
+                globalMakanBulanan = nilai * 4;
+                document.getElementById('proj_makan_hari_val').innerText = formatRupiah(nilai / 7);
+                document.getElementById('proj_makan_bulan_val').innerText = formatRupiah(globalMakanBulanan);
+                document.getElementById('row_proj_makan_hari').style.display = 'flex';
+                document.getElementById('row_proj_makan_bulan').style.display = 'flex';
+            } 
+            else if(skala === 'Bulanan') {
+                globalMakanBulanan = nilai;
+                document.getElementById('proj_makan_hari_val').innerText = formatRupiah(nilai / 28);
+                document.getElementById('proj_makan_minggu_val').innerText = formatRupiah(nilai / 4);
+                document.getElementById('row_proj_makan_hari').style.display = 'flex';
+                document.getElementById('proj_makan_minggu_val').style.display = 'flex';
+            }
+        }
+
+        function addNonMakanRow(savedData = null) {
+            nonMakanCount++; const id = nonMakanCount;
+            const html = `
+                <tr id="nm_table_row_${id}">
+                    <td>
+                        <input type="text" id="nm_nama_${id}" placeholder="Contoh: Pakaian / Pajak" oninput="calculateAll()">
+                    </td>
+                    <td>
+                        <select id="nm_periode_${id}" onchange="calculateAll()">
+                            <option value="Bulanan">Bulanan</option>
+                            <option value="Tahunan">Tahunan</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" id="nm_nominal_${id}" placeholder="Nominal" oninput="calculateAll()">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="bg-red-100 text-red-600 border border-red-200 px-2 py-1 rounded text-xs font-bold" onclick="removeNonMakanRow(${id})">X</button>
+                    </td>
+                </tr>
+            `;
+            document.getElementById('m5_nonmakan_table_body').insertAdjacentHTML('beforeend', html);
+            if(savedData) {
+                document.getElementById(`nm_nama_${id}`).value = savedData.nama || '';
+                document.getElementById(`nm_periode_${id}`).value = savedData.periode || 'Bulanan';
+                document.getElementById(`nm_nominal_${id}`).value = savedData.nominal || '';
+            }
+            calculateAll();
+        }
+
+        function removeNonMakanRow(id) {
+            const row = document.getElementById(`nm_table_row_${id}`);
+            if(row) { row.remove(); calculateAll(); }
+        }
+
+        function syncDropdownOptions() {
+            const artSelects = document.querySelectorAll('.art-dropdown-select');
+            const names = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const idStr = row.id.replace('art_row_', '');
+                const val = document.getElementById(`art_nama_${idStr}`).value.trim();
+                if(val) names.push({ id: idStr, name: val });
+            });
+            artSelects.forEach(select => {
+                const curr = select.value;
+                let opt = `<option value="">-- Pilih Anggota --</option>`;
+                names.forEach(item => { opt += `<option value="${item.name}">${item.name}</option>`; });
+                select.innerHTML = opt; select.value = curr;
+            });
+        }
+
+        function getMonthlyFactorValue(period, nominal, daysPerWeek = 5) {
+            const val = parseFloat(nominal) || 0;
+            switch(period) {
+                case 'Harian': return val * (parseFloat(daysPerWeek) || 5) * 4;
+                case 'Mingguan': return val * 4;
+                case 'Bulanan': return val;
+                case 'Tahunan': return val / 12;
+                default: return val;
+            }
+        }
+
+        function formatRupiah(num) { return 'Rp ' + Math.round(num).toLocaleString('id-ID'); }
+
+        function calculateAll() {
+            let totalArtSalaries = 0;
+            const artDataList = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('art_row_', '');
+                const nameVal = document.getElementById(`art_nama_${id}`).value.trim();
+                const kerjaVal = document.getElementById(`art_kerja_${id}`).value.trim();
+                const gajiVal = parseFloat(document.getElementById(`art_gaji_${id}`).value) || 0;
+                totalArtSalaries += gajiVal;
+                artDataList.push({ nama: nameVal, kerja: kerjaVal, gaji: gajiVal });
+            });
+
+            let totalOtherIncomes = 0;
+            const otherIncomesList = [];
+            document.getElementById('m2_pendapatan_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('p_row_', '');
+                const pemilik = document.getElementById(`p_pemilik_${id}`).value;
+                const nama = document.getElementById(`p_nama_${id}`).value;
+                const nominal = parseFloat(document.getElementById(`p_nominal_${id}`).value) || 0;
+                totalOtherIncomes += nominal;
+                otherIncomesList.push({ pemilik, nama, nominal });
+            });
+
+            let aggregateNetBusinessProfit = 0;
+            let totalUsahaDitemukan = 0;
+            document.getElementById('m3_usaha_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('u_row_', '');
+                totalUsahaDitemukan++;
+
+                const dOmzet = getCheckedDaysList(`u-day-cb-omzet-${id}`).length || 5;
+                const totalMonthlyCosts = 
+                    getMonthlyFactorValue(document.getElementById(`u_c_bahan_p_${id}`).value, parseFloat(document.getElementById(`u_c_bahan_v_${id}`).value)||0, getCheckedDaysList(`u-day-cb-bahan-${id}`).length||5) +
+                    getMonthlyFactorValue(document.getElementById(`u_c_gaji_p_${id}`).value, parseFloat(document.getElementById(`u_c_gaji_v_${id}`).value)||0, getCheckedDaysList(`u-day-cb-gaji-${id}`).length||5) +
+                    getMonthlyFactorValue(document.getElementById(`u_c_ops_p_${id}`).value, parseFloat(document.getElementById(`u_c_ops_v_${id}`).value)||0, getCheckedDaysList(`u-day-cb-ops-${id}`).length||5) +
+                    getMonthlyFactorValue(document.getElementById(`u_c_non_p_${id}`).value, parseFloat(document.getElementById(`u_c_non_v_${id}`).value)||0, getCheckedDaysList(`u-day-cb-non-${id}`).length||5);
+
+                const jenisInput = document.getElementById(`u_jenis_laba_input_${id}`).value;
+                const oPeriode = document.getElementById(`u_omzet_periode_${id}`).value;
+                const oNilai = parseFloat(document.getElementById(`u_omzet_nilai_${id}`).value) || 0;
+                const inputConvertedToMonthly = getMonthlyFactorValue(oPeriode, oNilai, dOmzet);
+                
+                let monthlyOmzet = 0;
+                let netMonthlyProfit = 0;
+
+                if (jenisInput === "KOTOR") {
+                    monthlyOmzet = inputConvertedToMonthly; netMonthlyProfit = monthlyOmzet - totalMonthlyCosts;
+                } else {
+                    netMonthlyProfit = inputConvertedToMonthly; monthlyOmzet = netMonthlyProfit + totalMonthlyCosts;
+                }
+
+                const netYearlyProfit = netMonthlyProfit * 12;
+                const omzetYearlyProfit = monthlyOmzet * 12;
+
+                document.getElementById(`u_calc_biaya_${id}`).innerText = formatRupiah(totalMonthlyCosts);
+                document.getElementById(`u_calc_omzet_${id}`).innerText = formatRupiah(monthlyOmzet);
+                document.getElementById(`u_calc_laba_${id}`).innerText = formatRupiah(netMonthlyProfit);
+                document.getElementById(`u_calc_omzet_thn_${id}`).innerText = formatRupiah(omzetYearlyProfit);
+                document.getElementById(`u_calc_laba_thn_${id}`).innerText = formatRupiah(netYearlyProfit);
+
+                aggregateNetBusinessProfit += netMonthlyProfit;
+            });
+
+            const inputListrikRaw = document.getElementById('m5_listrik_bulanan').value.trim();
+            const valListrik = parseFloat(inputListrikRaw) || 0;
+            if (valListrik < 45000 || inputListrikRaw === '') {
+                document.getElementById('tr_listrik_warning').style.display = 'table-row';
+            } else {
+                document.getElementById('tr_listrik_warning').style.display = 'none';
+            }
+
+            const inputInternetRaw = document.getElementById('m5_internet_bulanan').value.trim();
+            const valInternet = parseFloat(inputInternetRaw) || 0;
+            document.getElementById('tr_internet_warning').style.display = (inputInternetRaw === '0' || inputInternetRaw === '') ? 'table-row' : 'none';
+
+            let screenSumBulanan = globalMakanBulanan + valListrik + valInternet;
+            let screenSumTahunan = 0;
+            
+            let internalValidatorNonFoodMonthly = valListrik + valInternet;
+
+            const nonFoodList = [];
+            document.getElementById('m5_nonmakan_table_body').querySelectorAll('tr').forEach(row => {
+                const id = row.id.replace('nm_table_row_', '');
+                const nama = document.getElementById(`nm_nama_${id}`).value.trim();
+                const periode = document.getElementById(`nm_periode_${id}`).value;
+                const nominal = parseFloat(document.getElementById(`nm_nominal_${id}`).value) || 0;
+                
+                if(periode === 'Bulanan') {
+                    screenSumBulanan += nominal;
+                    internalValidatorNonFoodMonthly += nominal;
+                } else {
+                    screenSumTahunan += nominal; 
+                    internalValidatorNonFoodMonthly += (nominal / 12); 
+                }
+                nonFoodList.push({ nama, periode, nominal });
+            });
+
+            document.getElementById('mod4_total_bulanan_screen').innerText = formatRupiah(screenSumBulanan) + " / Bulan";
+            document.getElementById('mod4_total_tahunan_screen').innerText = formatRupiah(screenSumTahunan) + " / Tahun";
+
+            const totalCombinedHouseholdExpensesValidator = globalMakanBulanan + internalValidatorNonFoodMonthly;
+            const globalTotalRevenue = totalArtSalaries + totalOtherIncomes + aggregateNetBusinessProfit;
+            const absoluteFinancialDelta = globalTotalRevenue - totalCombinedHouseholdExpensesValidator;
+
+            document.getElementById('v_tot_pendapatan').innerText = formatRupiah(totalArtSalaries + totalOtherIncomes);
+            document.getElementById('v_tot_laba_usaha').innerText = formatRupiah(aggregateNetBusinessProfit);
+            document.getElementById('v_tot_pengeluaran').innerText = formatRupiah(totalCombinedHouseholdExpensesValidator);
+            document.getElementById('v_selisih').innerText = formatRupiah(absoluteFinancialDelta);
+
+            document.getElementById('sumber_penutup_group').style.display = (absoluteFinancialDelta < 0) ? 'block' : 'none';
+            document.getElementById('validation_badge_container').innerHTML = (absoluteFinancialDelta < 0) ? 
+                `<div id="status_badge" class="badge-status status-danger">🔴 Perlu Konfirmasi (Defisit)</div>` : 
+                `<div id="status_badge" class="badge-status status-consistent">🟢 Data Konsisten</div>`;
+
+            document.getElementById('validation_alerts').innerHTML = (absoluteFinancialDelta < 0) ? `<div class="alert-danger-box">🔴 Anomali Defisit Finansial: Pengeluaran sebulan lebih besar dari total pendapatan. Pilih sumber penutup.</div>` : '';
+
+            generateNarrativeOutputText(artDataList, otherIncomesList, totalUsahaDitemukan, aggregateNetBusinessProfit, nonFoodList, absoluteFinancialDelta, valListrik, valInternet, inputListrikRaw);
+        }
+
+        function generateNarrativeOutputText(art, incomes, totalUsaha, totalLabaUsaha, nonFood, delta, listrik, internet, inputListrikRaw) {
+            const noRumah = document.getElementById('m1_no_rumah').value.trim();
+            if(!noRumah) {
+                document.getElementById('narrative_output').innerText = "Status saat ini menunggu pengisian nomor bangunan di Modul 1."; return;
+            }
+
+            let text = `Hasil pencacahan pada keluarga di rumah nomor bangunan ${noRumah}. `;
+
+            if(art.length > 0) {
+                text += `Keluarga ini memiliki ${art.length} orang anggota keluarga. `;
+                art.forEach(p => {
+                    const namaStr = p.nama || '(Nama belum diisi)';
+                    if(!p.kerja) {
+                        text += `Sdr/i ${namaStr} status saat ini tidak bekerja. `;
+                    } else {
+                        if (p.gaji <= 0) {
+                            text += `Sdr/i ${namaStr} aktif bekerja sebagai ${p.kerja}. `;
+                        } else {
+                            text += `Sdr/i ${namaStr} bekerja sebagai ${p.kerja} dengan pendapatan utama sebulan sebesar ${formatRupiah(p.gaji)}. `;
+                        }
+                    }
+                });
+            }
+
+            if(incomes.length > 0) {
+                text += `Keluarga memperoleh kiriman sekunder berupa `;
+                incomes.forEach((inc, idx) => {
+                    text += `${inc.nama || 'Penerimaan'} atas nama ${inc.pemilik || 'Anggota'} senilai ${formatRupiah(inc.nominal)}${idx === incomes.length - 1 ? '. ' : ', '}`;
+                });
+            }
+
+            if(totalUsaha > 0) {
+                text += `Keluarga ini memiliki ${totalUsaha} unit usaha produktif dengan total laba bersih keseluruhan sebesar ${formatRupiah(totalLabaUsaha)} sebulan. `;
+            }
+
+            text += `Pengeluaran keluarga meliputi Listrik sebesar ${formatRupiah(listrik)}/bulan, Internet sebesar ${formatRupiah(internet)}/bulan`;
+            
+            if(nonFood.length > 0) {
+                nonFood.forEach(nf => {
+                    const unitLabel = (nf.periode === 'Bulanan') ? '/bulan' : '/tahun';
+                    text += `, ${nf.nama || 'Lainnya'} sebesar ${formatRupiah(nf.nominal)}${unitLabel}`;
+                });
+            }
+            text += `. `;
+
+            if (listrik > 0 && listrik < 45000) {
+                text += `Konfirmasi pengeluaran listrik bernilai rendah dikarenakan: ${document.getElementById('m5_listrik_alasan').value || 'alasan lapangan'}. `;
+            } else if (listrik === 0 || inputListrikRaw === '') {
+                text += `Konfirmasi pengeluaran listrik nihil dikarenakan: ${document.getElementById('m5_listrik_alasan').value || 'alasan lapangan'}. `;
+            }
+
+            if (document.getElementById('m5_internet_bulanan').value === '0' || document.getElementById('m5_internet_bulanan').value === '') {
+                text += `Konfirmasi pengeluaran internet nihil dikarenakan: ${document.getElementById('m5_internet_alasan').value || 'alasan lapangan'}. `;
+            }
+
+            if(delta < 0) {
+                text += `Kekurangan neraca keuangan ditutup dari sumber: ${document.getElementById('v_sumber_defisit').value || '(Belum dipilih)'}. `;
+            }
+
+            const tambahan = document.getElementById('v_catatan_tambahan').value.trim();
+            if(tambahan) text += `Catatan tambahan: ${tambahan}.`;
+
+            document.getElementById('narrative_output').innerText = text;
+        }
+
+        function copyNarrative() {
+            const text = document.getElementById('narrative_output').innerText;
+            if(!text || text.startsWith("Status saat ini")) return;
+            navigator.clipboard.writeText(text).then(() => showToast("✅ Catatan narasi berhasil disalin!"));
+        }
+
+        function shareNarrative() {
+            const text = document.getElementById('narrative_output').innerText;
+            if(!text || text.startsWith("Status saat ini")) return;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Catatan Narasi Sensus SE2026',
+                    text: text
+                })
+                .then(() => console.log('Sukses berbagi data'))
+                .catch((error) => console.log('Batal berbagi', error));
+            } else {
+                navigator.clipboard.writeText(text);
+                alert("Browser tidak mendukung share otomatis. Narasi disalin ke clipboard, silakan paste manual ke WhatsApp!");
+            }
+        }
+
+        function triggerManualResetForm() {
+            if(confirm("Apakah Anda yakin ingin mengosongkan form? Data yang belum disimpan ke daftar akan hilang.")) {
+                cleanFormAll(); showToast("🧹 Form sukses dibersihkan!");
+            }
+        }
+
+        function cleanFormAll() {
+            document.getElementById('m1_no_rumah').value = ''; document.getElementById('m1_no_hp').value = '';
+            document.getElementById('m4_makan_nilai').value = ''; document.getElementById('m5_listrik_bulanan').value = '';
+            document.getElementById('m5_listrik_alasan').value = ''; document.getElementById('m5_internet_bulanan').value = '';
+            document.getElementById('m5_internet_alasan').value = ''; document.getElementById('v_sumber_defisit').value = '';
+            document.getElementById('v_catatan_tambahan').value = '';
+            document.getElementById('m1_art_container').innerHTML = ''; document.getElementById('m2_pendapatan_container').innerHTML = '';
+            document.getElementById('m3_usaha_container').innerHTML = ''; document.getElementById('m5_nonmakan_table_body').innerHTML = '';
+            artCount = 0; pendapatanCount = 0; usahaCount = 0; nonMakanCount = 0; currentEditingId = null;
+            initDefaultSetup();
+        }
+
+        function saveDataToStorage() {
+            const noRumah = document.getElementById('m1_no_rumah').value.trim();
+            if(!noRumah) { alert("Nomor Bangunan wajib diisi!"); navigateWizard(1); return; }
+
+            let records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            const isDuplicate = records.some(r => r.no_rumah.toLowerCase() === noRumah.toLowerCase() && r.id !== currentEditingId);
+            
+            if (isDuplicate) {
+                const proceed = confirm(`⚠️ Peringatan: Nomor bangunan ${noRumah} sudah ada di data terdata.\nApakah anda ingin menimpa data tersebut dengan revisi baru ini?`);
+                if (!proceed) return;
+            }
+
+            const artData = [];
+            document.getElementById('m1_art_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('art_row_', '');
+                artData.push({
+                    nama: document.getElementById(`art_nama_${id}`).value,
+                    kerja: document.getElementById(`art_kerja_${id}`).value,
+                    gaji: document.getElementById(`art_gaji_${id}`).value
+                });
+            });
+
+            const uData = [];
+            document.getElementById('m3_usaha_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('u_row_', '');
+                uData.push({
+                    pj: document.getElementById(`u_pj_${id}`).value,
+                    nama: document.getElementById(`u_nama_${id}`).value,
+                    kbli: document.getElementById(`u_kbli_${id}`).value,
+                    komoditas: document.getElementById(`u_komoditas_${id}`).value,
+                    c_bahan_v: document.getElementById(`u_c_bahan_v_${id}`).value,
+                    c_bahan_p: document.getElementById(`u_c_bahan_p_${id}`).value,
+                    c_gaji_v: document.getElementById(`u_c_gaji_v_${id}`).value,
+                    c_gaji_p: document.getElementById(`u_c_gaji_p_${id}`).value,
+                    c_ops_v: document.getElementById(`u_c_ops_v_${id}`).value,
+                    c_ops_p: document.getElementById(`u_c_ops_p_${id}`).value,
+                    c_non_v: document.getElementById(`u_c_non_v_${id}`).value,
+                    c_non_p: document.getElementById(`u_c_non_p_${id}`).value,
+                    jenis_laba_input: document.getElementById(`u_jenis_laba_input_${id}`).value,
+                    omzet_periode: document.getElementById(`u_omzet_periode_${id}`).value,
+                    omzet_nilai: document.getElementById(`u_omzet_nilai_${id}`).value,
+                    cb_days_bahan: getCheckedDaysList(`u-day-cb-bahan-${id}`),
+                    cb_days_gaji: getCheckedDaysList(`u-day-cb-gaji-${id}`),
+                    cb_days_ops: getCheckedDaysList(`u-day-cb-ops-${id}`),
+                    cb_days_non: getCheckedDaysList(`u-day-cb-non-${id}`),
+                    cb_days_omzet: getCheckedDaysList(`u-day-cb-omzet-${id}`)
+                });
+            });
+
+            const pData = [];
+            document.getElementById('m2_pendapatan_container').querySelectorAll('.dynamic-row').forEach(row => {
+                const id = row.id.replace('p_row_', '');
+                pData.push({ pemilik: document.getElementById(`p_pemilik_${id}`).value, nama: document.getElementById(`p_nama_${id}`).value, nominal: document.getElementById(`p_nominal_${id}`).value });
+            });
+
+            const nmData = [];
+            document.getElementById('m5_nonmakan_table_body').querySelectorAll('tr').forEach(row => {
+                const id = row.id.replace('nm_table_row_', '');
+                nmData.push({ nama: document.getElementById(`nm_nama_${id}`).value, periode: document.getElementById(`nm_periode_${id}`).value, nominal: document.getElementById(`nm_nominal_${id}`).value });
+            });
+
+            const payload = {
+                id: currentEditingId || 'se2026_id_' + Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'), no_rumah: noRumah, no_hp: document.getElementById('m1_no_hp').value,
+                m4_makan_skala: document.getElementById('m4_makan_skala').value, m4_makan_nilai: document.getElementById('m4_makan_nilai').value,
+                m5_listrik_bulanan: document.getElementById('m5_listrik_bulanan').value, m5_listrik_alasan: document.getElementById('m5_listrik_alasan').value,
+                m5_internet_bulanan: document.getElementById('m5_internet_bulanan').value, m5_internet_alasan: document.getElementById('m5_internet_alasan').value,
+                sumber_defisit: document.getElementById('v_sumber_defisit').value, catatan_tambahan: document.getElementById('v_catatan_tambahan').value,
+                narrative: document.getElementById('narrative_output').innerText, artData, pData, uData, nmData
+            };
+
+            if(currentEditingId) { records = records.map(r => r.id === currentEditingId ? payload : r); } 
+            else { records.push(payload); }
+
+            localStorage.setItem('se2026_records', JSON.stringify(records));
+            
+            playSuccessSound(); // Bunyi melodi sukses simpan instan
+            
+            showToast("💾 Data keluarga sukses disimpan!");
+            cleanFormAll(); switchMasterTab('dash-panel');
+        }
+
+        // Dashboard data terdata
+        function loadRecordsDashboard() {
+            const container = document.getElementById('records_list_container');
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            if(records.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px;">Belum ada keluarga terdata.</p>`; return;
+            }
+            let html = '';
+            records.forEach(rec => {
+                html += `
+                    <div class="record-item">
+                        <div class="record-header"><span>🏠 Bangunan No: ${rec.no_rumah}</span><span style="font-size:10px; font-weight:normal;">${rec.timestamp}</span></div>
+                        <div style="font-size:11px; margin: 4px 0;">${rec.narrative.substring(0, 85)}...</div>
+                        <div>
+                            <button class="btn-edit" onclick="loadRecordIntoForm('${rec.id}')">🔄 Tarik ke Form</button>
+                            <button class="btn-del-rec" onclick="deleteRecord('${rec.id}')">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function loadRecordIntoForm(id) {
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            const rec = records.find(r => r.id === id);
+            if(!rec) return;
+
+            document.getElementById('m1_art_container').innerHTML = '';
+            document.getElementById('m2_pendapatan_container').innerHTML = '';
+            document.getElementById('m3_usaha_container').innerHTML = '';
+            document.getElementById('m5_nonmakan_table_body').innerHTML = '';
+            artCount = 0; pendapatanCount = 0; usahaCount = 0; nonMakanCount = 0;
+
+            currentEditingId = rec.id;
+            document.getElementById('m1_no_rumah').value = rec.no_rumah || '';
+            document.getElementById('m1_no_hp').value = rec.no_hp || '';
+            document.getElementById('m4_makan_skala').value = rec.m4_makan_skala || 'Bulanan';
+            document.getElementById('m4_makan_nilai').value = rec.m4_makan_nilai || '';
+            document.getElementById('m5_listrik_bulanan').value = rec.m5_listrik_bulanan || '';
+            document.getElementById('m5_listrik_alasan').value = rec.m5_listrik_alasan || '';
+            document.getElementById('m5_internet_bulanan').value = rec.m5_internet_bulanan !== undefined ? rec.m5_internet_bulanan : '';
+            document.getElementById('m5_internet_alasan').value = rec.m5_internet_alasan || '';
+            document.getElementById('v_catatan_tambahan').value = rec.catatan_tambahan || '';
+
+            if(rec.artData) rec.artData.forEach(d => addARTRow(d));
+            if(rec.pData) rec.pData.forEach(d => addPendapatanRow(d));
+            if(rec.uData) rec.uData.forEach(d => addUsahaRow(d));
+            if(rec.nmData) rec.nmData.forEach(d => addNonMakanRow(d));
+
+            handleMakanSkalaChange(); calculateMakanProjections(); syncDropdownOptions();
+            if(rec.sumber_defisit) document.getElementById('v_sumber_defisit').value = rec.sumber_defisit;
+            calculateAll(); switchMasterTab('form-panel');
+            toggleViewAllMode(); 
+        }
+
+        function deleteRecord(id) {
+            if(confirm("Apakah anda yakin ingin menghapus data ini?")) {
+                let records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+                records = records.filter(r => r.id !== id);
+                localStorage.setItem('se2026_records', JSON.stringify(records));
+                loadRecordsDashboard();
+            }
+        }
+
+        function exportToCSV() {
+            const records = JSON.parse(localStorage.getItem('se2026_records') || '[]');
+            if(records.length === 0) { alert("Tiada data untuk diekspor!"); return; }
+            let csv = "data:text/csv;charset=utf-8,ID,Timestamp,No_Bangunan,Makan_Input,Listrik,Internet,Catatan_Narasi\n";
+            records.forEach(r => {
+                csv += `"${r.id}","${r.timestamp}","${r.no_rumah}",${r.m4_makan_nilai||0},${r.m5_listrik_bulanan||0},${r.m5_internet_bulanan||0},"${(r.narrative||'').replace(/"/g, '""')}"\n`;
+            });
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", `Ekspor_KangSensus_${Date.now()}.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
